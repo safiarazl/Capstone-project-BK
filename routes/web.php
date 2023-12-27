@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\LogRegController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/login', [LogRegController::class, 'loginForm'])->name('login');
+Route::post('/login-proses', [LogRegController::class, 'loginProses'])->name('loginProses');
+
+Route::get('/register', [LogRegController::class, 'registerForm'])->name('register');
+Route::post('/register-proses', [LogRegController::class, 'registerProses'])->name('registerProses');
