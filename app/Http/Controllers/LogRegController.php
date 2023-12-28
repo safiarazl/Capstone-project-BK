@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Akun;
 use App\Models\Pasien;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class LogRegController extends Controller
 {
@@ -17,20 +18,21 @@ class LogRegController extends Controller
     public function loginProses(Request $request)
     {
         // dd($request->all());
-        $akun = Akun::where('email', $request->input('email'))->first();
-        if ($akun->email == $request->input('email') && password_verify($request->input('password'), $akun->password)) {
-            // Simpan informasi akun ke dalam session
-            $request->session()->put('id', $akun->id);
-            $request->session()->put('email', $akun->email);
-            $request->session()->put('role', $akun->role);
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:2',
+        ]);
+        $data = [
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+        ];
 
-            if ($akun->role == 'pasien') {
-                return redirect('/pasien/dashboard')->with('success', 'Login successful!');
-            } else if ($akun->role == 'admin') {
-                return redirect('/admin/dashboard')->with('success', 'Login successful!');
-            } else if ($akun->role == 'dokter') {
-                return redirect('/dokter/dashboard')->with('success', 'Login successful!');
-            }
+        if (Auth::attempt($data)) {
+            // Simpan informasi akun ke dalam session
+            $akun = User::where('email', $request->input('email'))->first();
+            $request->session()->put('name', $akun->name);
+            $request->session()->put('role', $akun->role);
+            return redirect('/dashboard')->with('success', 'Login successful!');
         }
 
         return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
@@ -39,6 +41,7 @@ class LogRegController extends Controller
     public function logout(Request $request)
     {
         $request->session()->flush();
+        Auth::logout();
         return redirect('/login')->with('success', 'Logout successful!');
     }
 
@@ -52,14 +55,17 @@ class LogRegController extends Controller
         // dd($request->all());
         $this->validator($request->all())->validate();
 
-        $akun = Akun::create([
+        $data = [
+            'name' => $request->input('nama'),
             'email' => $request->input('email'),
-            'password' => bcrypt($request->input('password')),
+            'password' => $request->input('password'),
             'role' => 'pasien',
-        ]);
+        ];
+
+        $user = User::create($data);
 
         Pasien::create([
-            'id_akun' => $akun->id,
+            'id_akun' => $user->id,
             'nama' => $request->input('nama'),
             'alamat' => $request->input('alamat'),
             'no_ktp' => $request->input('no_ktp'),
@@ -67,7 +73,20 @@ class LogRegController extends Controller
             'no_rm' => $this->generateNoRM(),
         ]);
 
-        // return redirect()->route('/login')->with('success', 'Registration successful. Please log in.');
+        $login = [
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+        ];
+
+
+        if (Auth::attempt($login)) {
+            // Simpan informasi akun ke dalam session
+            $akun = User::where('email', $request->input('email'))->first();
+            $request->session()->put('name', $akun->name);
+            $request->session()->put('role', $akun->role);
+            return redirect('/dashboard')->with('success', 'Login successful!');
+        }
+
         return redirect('/login')->with('success', 'Login successful!');
     }
 
