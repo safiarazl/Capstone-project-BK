@@ -117,7 +117,7 @@
 
 
     <!--Container-->
-    <div class="container w-full md:w-4/5 xl:w-3/5  mx-auto px-2">
+    <div class="container w-full md:w-4/5  mx-auto px-2">
 
         <!--Title-->
         <h1 class="flex items-center font-sans font-bold break-normal text-indigo-500 px-2 py-8 text-xl md:text-2xl">
@@ -132,33 +132,29 @@
             <table id="example" class="stripe hover" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
                 <thead>
                     <tr>
-                        <th data-priority="1">Name</th>
-                        <th data-priority="2">Email</th>
-                        <th data-priority="3">No. Hp</th>
-                        <th data-priority="4">Alamat</th>
-                        <th data-priority="5">Poli</th>
-                        <th>Aksi</th>
+                        <th data-priority="1">Nama</th>
+                        <th data-priority="2">Alamat</th>
+                        <th data-priority="3">No. KTP</th>
+                        <th data-priority="4">No. HP</th>
+                        <th data-priority="5">No. RM</th>
+                        <th data-priority="6">Email</th>
+                        <th data-priority="7">Aksi</th>
 
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($dokters as $dokter)
+                    @foreach ($pasiens as $pasien)
                         <tr>
-                            <td>{{ $dokter->user->name }}</td>
-                            <td>{{ $dokter->user->email }}</td>
-                            <td>{{ $dokter->no_hp }}</td>
-                            <td>{{ $dokter->alamat }}</td>
-                            <td>
-                                @if ($dokter->id_poli == null)
-                                    Poli belum ditentukan
-                                @else
-                                    {{ $dokter->poli->nama_poli }}
-                                @endif
-                            </td>
+                            <td>{{ $pasien->nama }}</td>
+                            <td>{{ $pasien->alamat }}</td>
+                            <td>{{ $pasien->no_ktp }}</td>
+                            <td>{{ $pasien->no_hp }}</td>
+                            <td>{{ $pasien->no_rm }}</td>
+                            <td>{{ $pasien->user->email }}</td>
                             <td class="grid grid-cols-2">
-                                <a href="{{ route('editDokter', $dokter->id) }}"
+                                <a href="{{ route('editPasien', $pasien->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</a>
-                                <form action="{{ route('deleteDokterProses', $dokter->id) }}" method="POST">
+                                <form action="{{ route('deletePasienProses', $pasien->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
@@ -179,14 +175,14 @@
     </div>
     <!--/container-->
 
-    {{-- tambah dokter --}}
-    <div class="container w-full md:w-4/5 xl:w-3/5  mx-auto px-2">
+    {{-- tambah Pasien --}}
+    <div class="container w-full md:w-4/5  mx-auto px-2">
         <section>
-            <h3 class="font-bold text-2xl">Tambah Dokter</h3>
+            <h3 class="font-bold text-2xl">Tambah Pasien</h3>
         </section>
 
         <section class="mt-10">
-            <form class="flex flex-col" method="POST" action="{{ route('tambahDokterProses') }}">
+            <form class="flex flex-col" method="POST" action="{{ route('tambahPasienProses') }}">
                 @csrf
                 <div class="mb-6 pt-3 rounded bg-gray-200">
                     <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama">Nama</label>
@@ -199,12 +195,9 @@
                         class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
                 </div>
                 <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_ktp">Poli</label>
-                    <select data-te-select-init name="id_poli" class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                        @foreach ($polis as $poli)
-                        <option value="{{$poli['id']}}">{{ucwords($poli['nama_poli'])}}</option>
-                        @endforeach
-                      </select>
+                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_ktp">No. KTP</label>
+                    <input type="text" name="no_ktp" id="no_ktp"
+                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
                 </div>
                 <div class="mb-6 pt-3 rounded bg-gray-200">
                     <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_hp">No. HP</label>
@@ -213,7 +206,7 @@
                 </div>
                 <div class="mb-6 pt-3 rounded bg-gray-200">
                     <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="email">Email</label>
-                    <input type="email" name="email" id="email"
+                    <input type="text" name="email" id="email"
                         class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
                 </div>
                 <div class="mb-6 pt-3 rounded bg-gray-200">

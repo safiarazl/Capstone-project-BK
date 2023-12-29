@@ -21,46 +21,43 @@
 
 <body class="body-bg min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0" style="font-family:'Lato',sans-serif;">
     <header class="max-w-lg mx-auto">
-        <a href="{{ route('manageDokter') }}">
+        <a href="{{ route('managePasien') }}">
             <h1 class="text-4xl font-bold text-white text-center">Admin</h1>
         </a>
     </header>
 
     <main class="bg-white max-w-lg mx-auto p-8 md:p-12 my-10 rounded-lg shadow-2xl">
         <section>
-            <h3 class="font-bold text-2xl">Edit Dokter</h3>
+            <h3 class="font-bold text-2xl">Edit Pasien</h3>
         </section>
 
         <section class="mt-10">
-            <form class="flex flex-col" method="POST" action="{{ route('editDokterProses', $dokter->id) }}">
+            <form class="flex flex-col" method="POST" action="{{ route('editPasienProses', $pasien->id) }}">
                 @csrf
                 @method('PUT')
                 <div class="mb-6 pt-3 rounded bg-gray-200">
                     <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama">Nama</label>
-                    <input type="text" name="nama" id="nama" value="{{ $dokter->nama }}"
+                    <input type="text" name="nama" id="nama" value="{{ $pasien->nama }}"
                         class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
                 </div>
                 <div class="mb-6 pt-3 rounded bg-gray-200">
                     <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="alamat">Alamat</label>
-                    <input type="text" name="alamat" id="alamat" value="{{ $dokter->alamat }}"
+                    <input type="text" name="alamat" id="alamat" value="{{ $pasien->alamat }}"
                         class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
                 </div>
                 <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_ktp">Poli</label>
-                    <select data-te-select-init name="id_poli" class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                        @foreach ($polis as $poli)
-                        <option value="{{$poli['id']}}" @if ($poli['id'] == $dokter->id_poli) selected @endif>{{ucwords(strtolower($poli['nama_poli']))}}</option>
-                        @endforeach
-                      </select>
+                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_ktp">No. KTP</label>
+                    <input type="text" name="no_ktp" id="no_ktp" value="{{ $pasien->no_ktp }}"
+                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
                 </div>
                 <div class="mb-6 pt-3 rounded bg-gray-200">
                     <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_hp">No. HP</label>
-                    <input type="text" name="no_hp" id="no_hp" value="{{ $dokter->no_hp }}"
+                    <input type="text" name="no_hp" id="no_hp" value="{{ $pasien->no_hp }}"
                         class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
                 </div>
                 <div class="mb-6 pt-3 rounded bg-gray-200">
                     <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="email">Email</label>
-                    <input type="email" name="email" id="email" value="{{ $dokter->user->email }}"
+                    <input type="email" name="email" id="email" value="{{ $pasien->user->email }}"
                         class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
                 </div>
                 <div class="mb-6 pt-3 rounded bg-gray-200">

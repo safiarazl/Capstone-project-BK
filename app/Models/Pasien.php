@@ -16,8 +16,8 @@ class Pasien extends Model
     public $timestamps = false;
     protected $fillable = ['id_akun', 'nama', 'alamat', 'no_ktp', 'no_hp', 'no_rm'];
 
-    public function akun(): BelongsTo
+    public function user()
     {
-        return $this->belongsTo(Pasien::class, 'id_akun', 'id');
+        return $this->belongsTo(User::class, 'id_akun', 'id');
     }
 }
