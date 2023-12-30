@@ -1,26 +1,38 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\Dokter; // Add this line to import the 'Dokter' class
 use App\Models\User; // Add this line to import the 'User' class
 use App\Models\Poli;
 use App\Models\Pasien;
 use App\Models\Obat;
+use App\Models\Jadwal_periksa;
 
 class AdminDashboard extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        if (session('role') == 'pasien' || session('role') == 'dokter') {
-            redirect('/')->with('error', 'You do not have access to this page!');
-        }
-    }
-
     // view functions
     public function index()
     {
+        if (auth()->user()->role == 'admin') {
+            // get count user
+            $user = User::count('id');
+            $dokter = Dokter::count('id');
+            $pasien = Pasien::count('id');
+            $poli = Poli::count('id');
+            $obat = Obat::count('id');
+            return view('dashboard.dashboard', compact('user', 'dokter', 'pasien', 'poli', 'obat'));
+        } else if (auth()->user()->role == 'dokter') {
+            $cekJadwal = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->get();
+            // dd($cekJadwal);
+            return view('dashboard.dashboard', compact('cekJadwal') );
+
+        } else if (auth()->user()->role == 'pasien') {
+            $jadwals = Jadwal_periksa::with(['dokter.poli'])->get();
+            return view('dashboard.dashboard', compact('jadwals'));
+        }
+
         return view('dashboard.dashboard');
     }
 
@@ -28,26 +40,32 @@ class AdminDashboard extends Controller
     public function manageObat()
     {
         $obats = Obat::all();
-        return view('dashboard.manageObat', compact('obats'));
+        $operation = 'noedit';
+        return view('dashboard.manageObat', compact('obats', 'operation'));
     }
 
     public function editObat($id)
     {
         $obat = Obat::where('id', $id)->first();
-        return view('dashboard.editObat', compact('obat'));
+        $obats = Obat::all();
+        $operation = 'edit';
+        return view('dashboard.manageObat', compact('obats', 'obat', 'operation'));
     }
 
     // view admin pasien functions
     public function managePasien()
     {
         $pasiens = Pasien::with(['user'])->get();
-        return view('dashboard.managePasien', compact('pasiens'));
+        $operation = 'noedit';
+        return view('dashboard.managePasien', compact('pasiens', 'operation'));
     }
 
     public function editPasien($id)
     {
         $pasien = Pasien::with(['user'])->where('id', $id)->first();
-        return view('dashboard.editPasien', compact('pasien'));
+        $operation = 'edit';
+        $pasiens = Pasien::with(['user'])->get();
+        return view('dashboard.managePasien', compact('pasien', 'pasiens', 'operation'));
     }
 
     // view admin dokter functions
@@ -55,27 +73,32 @@ class AdminDashboard extends Controller
     {
         $dokters = Dokter::with(['user', 'poli'])->get();
         $polis = Poli::all();
-        return view('dashboard.manageDokter', compact('dokters', 'polis'));
+        $operation = 'noedit';
+        return view('dashboard.manageDokter', compact('dokters', 'polis', 'operation'));
     }
 
     public function editDokter($id)
     {
+        $dokters = Dokter::with(['user', 'poli'])->get();
         $dokter = Dokter::with(['user', 'poli'])->where('id', $id)->first();
-        // dd($dokter);
         $polis = Poli::all();
-        return view('dashboard.editDokter', compact('dokter', "polis"));
+        $operation = 'edit';
+        return view('dashboard.manageDokter', compact('dokters', 'dokter', "polis", 'operation'));
     }
 
     // view admin poli functions
     public function managePoli()
     {
         $polis = Poli::all();
-        return view('dashboard.managePoli', compact('polis'));
+        $operation = 'noedit';
+        return view('dashboard.managePoli', compact('polis', 'operation'));
     }
     public function editPoli($id)
     {
         $poli = Poli::where('id', $id)->first();
-        return view('dashboard.editPoli', compact('poli'));
+        $polis = Poli::all();
+        $operation = 'edit';
+        return view('dashboard.managePoli', compact('polis', 'poli', 'operation'));
     }
 
     // view admin obat functions
@@ -296,7 +319,6 @@ class AdminDashboard extends Controller
 
         $dokter = Dokter::where('id', $id)->first();
         $user = User::where('id', $dokter->id_akun)->first();
-        // dd($dokter, $user, $request->all(), $id);
         if (!password_verify($request->input('password-lama'), $user->password)) {
             return back()->withErrors(['password-lama' => 'Password lama tidak sama!'])->withInput();
         }

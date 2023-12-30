@@ -116,106 +116,68 @@
 <body class="bg-gray-100 text-gray-900 tracking-wider leading-normal">
 
 
-    <!--Container-->
+    {{-- tambah dokter --}}
     <div class="container w-full md:w-4/5 xl:w-3/5  mx-auto px-2">
-
-        <!--Title-->
-        <h1 class="flex items-center font-sans font-bold break-normal text-indigo-500 px-2 py-8 text-xl md:text-2xl">
-            <a class="underline mx-2" href="{{ route('adminDashboard') }}">back to Dashboard</a>
-        </h1>
-
-
-        <!--Card-->
-        <div id='recipients' class="p-8 mt-6 lg:mt-0 rounded shadow bg-white">
-
-
-            <table id="example" class="stripe hover" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
-                <thead>
-                    <tr>
-                        <th data-priority="1">Nama Poli</th>
-                        <th data-priority="2">Keterangan</th>
-                        <th data-priority="3">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($polis as $poliTable)
-                        <tr>
-                            <td>{{ $poliTable->nama_poli }}</td>
-                            <td>{{ $poliTable->keterangan }}</td>
-                            <td class="flex flex-cols-1 place-content-center">
-                                <a href="{{ route('editPoli', $poliTable->id) }}"
-                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</a>
-                                <form action="{{ route('deletePoliProses', $poliTable->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-
-            </table>
-
-
-        </div>
-        <!--/Card-->
-
-
-    </div>
-    <!--/container-->
-
-    {{-- tambah poli --}}
-    <main class="container w-full md:w-4/5 xl:w-3/5  mx-auto px-2">
         <section>
-            @if ($operation == 'noedit')
-                <h3 class="font-bold text-2xl">Tambah Poli</h3>
-            @else
-                <h3 class="font-bold text-2xl">Edit Poli</h3>
-            @endif
+            <a href="{{ route('dashboard') }}">
+                <h3 class="font-bold text-2xl">Change Profile</h3>
+            </a>
+
         </section>
 
         <section class="mt-10">
-            @if ($operation == 'noedit')
-            <form class="flex flex-col" method="POST" action="{{ route('tambahPoliProses') }}">
-                @csrf
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama_poli">Nama poli</label>
-                    <input type="text" name="nama_poli" id="nama_poli"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="keterangan">Keterangan</label>
-                    <input type="text" name="keterangan" id="keterangan"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <button
-                    class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-                    type="submit">Tambah</button>
-            </form>
-            @else
-            <form class="flex flex-col" method="POST" action="{{ route('editPoliProses', $poli->id) }}">
+            <form class="flex flex-col" method="POST" action="{{ route('changeProfileProses', $dokter->id) }}">
                 @csrf
                 @method('PUT')
                 <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama_poli">Nama poli</label>
-                    <input type="text" value="{{ $poli->nama_poli }}" name="nama_poli" id="nama_poli"
+                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama">Nama</label>
+                    <input type="text" name="nama" id="nama" value="{{ $user->name }}"
                         class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
                 </div>
                 <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="keterangan">Keterangan</label>
-                    <input type="text" value="{{ $poli->keterangan }}" name="keterangan" id="keterangan"
+                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="alamat">Alamat</label>
+                    <input type="text" name="alamat" id="alamat" value="{{ $dokter->alamat }}"
+                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                </div>
+                <div class="mb-6 pt-3 rounded bg-gray-200">
+                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_ktp">Poli</label>
+                    <select data-te-select-init name="id_poli"
+                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                        @foreach ($polis as $poli)
+                            <option value="{{ $poli['id'] }}" @if ($poli['id'] == $dokter->id_poli) selected @endif>
+                                {{ ucwords(strtolower($poli['nama_poli'])) }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-6 pt-3 rounded bg-gray-200">
+                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_hp">No. HP</label>
+                    <input type="text" name="no_hp" id="no_hp" value="{{ $dokter->no_hp }}"
+                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                </div>
+                <div class="mb-6 pt-3 rounded bg-gray-200">
+                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="email">Email</label>
+                    <input type="email" name="email" id="email" value="{{ $user->email }}"
+                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                </div>
+                <div class="mb-6 pt-3 rounded bg-gray-200">
+                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="password">Password
+                        Lama</label>
+                    <input type="password" name="password-lama" id="password-lama"
+                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                </div>
+                <div class="mb-6 pt-3 rounded bg-gray-200">
+                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="password">Password
+                        Baru</label>
+                    <input type="password" name="password-baru" id="password-baru"
                         class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
                 </div>
                 <button
                     class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
                     type="submit">Edit</button>
             </form>
-            @endif
         </section>
-    </main>
-    {{-- /tambah poli --}}
+    </div>
+    {{-- /tambah dokter --}}
 
 
 

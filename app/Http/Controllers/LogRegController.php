@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use App\Models\Akun;
 use App\Models\Pasien;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -32,7 +31,7 @@ class LogRegController extends Controller
             $akun = User::where('email', $request->input('email'))->first();
             $request->session()->put('name', $akun->name);
             $request->session()->put('role', $akun->role);
-            return redirect('/dashboard')->with('success', 'Login successful!');
+            return redirect('/home')->with('success', 'Login successful!');
         }
 
         return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
@@ -84,7 +83,7 @@ class LogRegController extends Controller
             $akun = User::where('email', $request->input('email'))->first();
             $request->session()->put('name', $akun->name);
             $request->session()->put('role', $akun->role);
-            return redirect('/dashboard')->with('success', 'Login successful!');
+            return redirect('/home')->with('success', 'Login successful!');
         }
 
         return redirect('/login')->with('success', 'Login successful!');

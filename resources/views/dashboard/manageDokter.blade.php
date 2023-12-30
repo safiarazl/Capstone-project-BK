@@ -142,23 +142,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($dokters as $dokter)
+                    @foreach ($dokters as $dokterTable)
                         <tr>
-                            <td>{{ $dokter->user->name }}</td>
-                            <td>{{ $dokter->user->email }}</td>
-                            <td>{{ $dokter->no_hp }}</td>
-                            <td>{{ $dokter->alamat }}</td>
+                            <td>{{ $dokterTable->user->name }}</td>
+                            <td>{{ $dokterTable->user->email }}</td>
+                            <td>{{ $dokterTable->no_hp }}</td>
+                            <td>{{ $dokterTable->alamat }}</td>
                             <td>
-                                @if ($dokter->id_poli == null)
+                                @if ($dokterTable->id_poli == null)
                                     Poli belum ditentukan
                                 @else
-                                    {{ $dokter->poli->nama_poli }}
+                                    {{ $dokterTable->poli->nama_poli }}
                                 @endif
                             </td>
                             <td class="grid grid-cols-2">
-                                <a href="{{ route('editDokter', $dokter->id) }}"
+                                <a href="{{ route('editDokter', $dokterTable->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</a>
-                                <form action="{{ route('deleteDokterProses', $dokter->id) }}" method="POST">
+                                <form action="{{ route('deleteDokterProses', $dokterTable->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
@@ -182,49 +182,107 @@
     {{-- tambah dokter --}}
     <div class="container w-full md:w-4/5 xl:w-3/5  mx-auto px-2">
         <section>
-            <h3 class="font-bold text-2xl">Tambah Dokter</h3>
+            @if ($operation == 'noedit')
+                <h3 class="font-bold text-2xl">Tambah Dokter</h3>
+            @elseif ($dokter->id != null)
+                <h3 class="font-bold text-2xl">Edit Dokter</h3>
+            @endif
+
         </section>
 
         <section class="mt-10">
-            <form class="flex flex-col" method="POST" action="{{ route('tambahDokterProses') }}">
-                @csrf
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama">Nama</label>
-                    <input type="text" name="nama" id="nama"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="alamat">Alamat</label>
-                    <input type="text" name="alamat" id="alamat"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_ktp">Poli</label>
-                    <select data-te-select-init name="id_poli" class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                        @foreach ($polis as $poli)
-                        <option value="{{$poli['id']}}">{{ucwords($poli['nama_poli'])}}</option>
-                        @endforeach
-                      </select>
-                </div>
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_hp">No. HP</label>
-                    <input type="text" name="no_hp" id="no_hp"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="email">Email</label>
-                    <input type="email" name="email" id="email"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="password">Password</label>
-                    <input type="password" name="password" id="password"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <button
-                    class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-                    type="submit">Tambah</button>
-            </form>
+            @if ($operation == 'noedit')
+                <form class="flex flex-col" method="POST" action="{{ route('tambahDokterProses') }}">
+                    @csrf
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama">Nama</label>
+                        <input type="text" name="nama" id="nama"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="alamat">Alamat</label>
+                        <input type="text" name="alamat" id="alamat"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_ktp">Poli</label>
+                        <select data-te-select-init name="id_poli"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                            @foreach ($polis as $poli)
+                                <option value="{{ $poli['id'] }}">{{ ucwords($poli['nama_poli']) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_hp">No. HP</label>
+                        <input type="text" name="no_hp" id="no_hp"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="email">Email</label>
+                        <input type="email" name="email" id="email"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="password">Password</label>
+                        <input type="password" name="password" id="password"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <button
+                        class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+                        type="submit">Tambah</button>
+                </form>
+            @elseif ($dokter->id != null)
+                <form class="flex flex-col" method="POST" action="{{ route('editDokterProses', $dokter->id) }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama">Nama</label>
+                        <input type="text" name="nama" id="nama" value="{{ $dokter->nama }}"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="alamat">Alamat</label>
+                        <input type="text" name="alamat" id="alamat" value="{{ $dokter->alamat }}"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_ktp">Poli</label>
+                        <select data-te-select-init name="id_poli"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                            @foreach ($polis as $poli)
+                                <option value="{{ $poli['id'] }}" @if ($poli['id'] == $dokter->id_poli) selected @endif>
+                                    {{ ucwords(strtolower($poli['nama_poli'])) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_hp">No. HP</label>
+                        <input type="text" name="no_hp" id="no_hp" value="{{ $dokter->no_hp }}"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="email">Email</label>
+                        <input type="email" name="email" id="email" value="{{ $dokter->user->email }}"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="password">Password
+                            Lama</label>
+                        <input type="password" name="password-lama" id="password-lama"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="password">Password
+                            Baru</label>
+                        <input type="password" name="password-baru" id="password-baru"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <button
+                        class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+                        type="submit">Edit</button>
+                </form>
+            @endif
         </section>
     </div>
     {{-- /tambah dokter --}}

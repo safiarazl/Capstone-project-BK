@@ -8,11 +8,11 @@
             <div class="w-1/2 pl-2 md:pl-0">
                 <a class="text-gray-100 text-base xl:text-xl no-underline hover:no-underline font-bold" href="#">
                     <i class="fas fa-moon text-blue-400 pr-3"></i>
-                    @if (session('role') == 'admin')
+                    @if (Auth::user()->role == 'admin')
                         Admin Dashboard
-                    @elseif (session('role') == 'pasien')
+                    @elseif (Auth::user()->role == 'pasien')
                         Pasien Dashboard
-                    @elseif (session('role') == 'dokter')
+                    @elseif (Auth::user()->role == 'dokter')
                         Dokter Dashboard
                     @endif
                 </a>
@@ -42,11 +42,11 @@
                         <div id="userMenu"
                             class="bg-gray-900 rounded shadow-md mt-2 absolute mt-12 top-0 right-0 min-w-full overflow-auto z-30 invisible">
                             <ul class="list-reset">
-                                <li><a href="#"
-                                        class="px-4 py-2 block text-gray-100 hover:bg-gray-800 no-underline hover:no-underline">My
-                                        account</a></li>
-                                <li><a href="#"
-                                        class="px-4 py-2 block text-gray-100 hover:bg-gray-800 no-underline hover:no-underline">Notifications</a>
+                                <li>
+                                    @if (Auth::user()->role == 'dokter')
+                                        <a href="{{ route('changeProfile', Auth::user()->id) }}"
+                                            class="px-4 py-2 block text-gray-100 hover:bg-gray-800 no-underline hover:no-underline">My Profile</a>
+                                    @endif
                                 </li>
                                 <li>
                                     <hr class="border-t mx-2 border-gray-400">
@@ -72,70 +72,12 @@
 
             </div>
 
-
-            <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-gray-900 z-20"
-                id="nav-content">
-                <ul class="list-reset lg:flex flex-1 items-center px-4 md:px-0">
-                    <li class="mr-6 my-2 md:my-0">
-                        <a href="#"
-                            class="block py-1 md:py-3 pl-1 align-middle text-blue-400 no-underline hover:text-gray-100 border-b-2 border-blue-400 hover:border-blue-400">
-                            <i class="fas fa-home fa-fw mr-3 text-blue-400"></i><span
-                                class="pb-1 md:pb-0 text-sm">Home</span>
-                        </a>
-                    </li>
-                    <li class="mr-6 my-2 md:my-0">
-                        <a href="{{ route('manageDokter') }}"
-                            class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-gray-900  hover:border-pink-400">
-                            <i class="fas fa-tasks fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Manage Dokter</span>
-                        </a>
-                    </li>
-                    <li class="mr-6 my-2 md:my-0">
-                        <a href="{{ route('managePoli') }}"
-                            class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-gray-900  hover:border-pink-400">
-                            <i class="fas fa-tasks fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Manage Poli</span>
-                        </a>
-                    </li>
-                    <li class="mr-6 my-2 md:my-0">
-                        <a href="{{ route('managePasien') }}"
-                            class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-gray-900  hover:border-pink-400">
-                            <i class="fas fa-tasks fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Manage Pasien</span>
-                        </a>
-                    </li>
-                    <li class="mr-6 my-2 md:my-0">
-                        <a href="{{ route('manageObat') }}"
-                            class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-gray-900  hover:border-pink-400">
-                            <i class="fas fa-tasks fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Manage Obat</span>
-                        </a>
-                    </li>
-                    <li class="mr-6 my-2 md:my-0">
-                        <a href="#"
-                            class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-gray-900  hover:border-green-400">
-                            <i class="fas fa-chart-area fa-fw mr-3"></i><span
-                                class="pb-1 md:pb-0 text-sm">Analytics</span>
-                        </a>
-                    </li>
-                    <li class="mr-6 my-2 md:my-0">
-                        <a href="#"
-                            class="block py-1 md:py-3 pl-1 align-middle text-gray-500 no-underline hover:text-gray-100 border-b-2 border-gray-900  hover:border-red-400">
-                            <i class="fa fa-wallet fa-fw mr-3"></i><span class="pb-1 md:pb-0 text-sm">Payments</span>
-                        </a>
-                    </li>
-                </ul>
-
-                <div class="relative pull-right pl-4 pr-4 md:pr-0">
-                    <input type="search" placeholder="Search"
-                        class="w-full bg-gray-900 text-sm text-gray-400 transition border border-gray-800 focus:outline-none focus:border-gray-600 rounded py-1 px-2 pl-10 appearance-none leading-normal">
-                    <div class="absolute search-icon" style="top: 0.375rem;left: 1.75rem;">
-                        <svg class="fill-current pointer-events-none text-gray-500 w-4 h-4"
-                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                            <path
-                                d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z">
-                            </path>
-                        </svg>
-                    </div>
-                </div>
-
-            </div>
-
+            @if (Auth::user()->role == 'admin')
+                @include('layout.AdminHeaderContent')
+            @elseif (Auth::user()->role == 'pasien')
+                @include('layout.PasienHeaderContent')
+            @elseif (Auth::user()->role == 'dokter')
+                @include('layout.DokterHeaderContent')
+            @endif
         </div>
     </nav>

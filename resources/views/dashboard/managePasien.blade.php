@@ -143,18 +143,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($pasiens as $pasien)
+                    @foreach ($pasiens as $pasienTable)
                         <tr>
-                            <td>{{ $pasien->nama }}</td>
-                            <td>{{ $pasien->alamat }}</td>
-                            <td>{{ $pasien->no_ktp }}</td>
-                            <td>{{ $pasien->no_hp }}</td>
-                            <td>{{ $pasien->no_rm }}</td>
-                            <td>{{ $pasien->user->email }}</td>
+                            <td>{{ $pasienTable->nama }}</td>
+                            <td>{{ $pasienTable->alamat }}</td>
+                            <td>{{ $pasienTable->no_ktp }}</td>
+                            <td>{{ $pasienTable->no_hp }}</td>
+                            <td>{{ $pasienTable->no_rm }}</td>
+                            <td>{{ $pasienTable->user->email }}</td>
                             <td class="grid grid-cols-2">
-                                <a href="{{ route('editPasien', $pasien->id) }}"
+                                <a href="{{ route('editPasien', $pasienTable->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</a>
-                                <form action="{{ route('deletePasienProses', $pasien->id) }}" method="POST">
+                                <form action="{{ route('deletePasienProses', $pasienTable->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
@@ -178,46 +178,96 @@
     {{-- tambah Pasien --}}
     <div class="container w-full md:w-4/5  mx-auto px-2">
         <section>
-            <h3 class="font-bold text-2xl">Tambah Pasien</h3>
+            @if ($operation == 'noedit')
+                <h3 class="font-bold text-2xl">Tambah Pasien</h3>
+            @else
+                <h3 class="font-bold text-2xl">Edit Pasien</h3>
+            @endif
         </section>
 
         <section class="mt-10">
-            <form class="flex flex-col" method="POST" action="{{ route('tambahPasienProses') }}">
-                @csrf
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama">Nama</label>
-                    <input type="text" name="nama" id="nama"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="alamat">Alamat</label>
-                    <input type="text" name="alamat" id="alamat"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_ktp">No. KTP</label>
-                    <input type="text" name="no_ktp" id="no_ktp"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_hp">No. HP</label>
-                    <input type="text" name="no_hp" id="no_hp"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="email">Email</label>
-                    <input type="text" name="email" id="email"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="password">Password</label>
-                    <input type="password" name="password" id="password"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <button
-                    class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-                    type="submit">Tambah</button>
-            </form>
+            @if ($operation == 'noedit')
+                <form class="flex flex-col" method="POST" action="{{ route('tambahPasienProses') }}">
+                    @csrf
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama">Nama</label>
+                        <input type="text" name="nama" id="nama"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="alamat">Alamat</label>
+                        <input type="text" name="alamat" id="alamat"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_ktp">No. KTP</label>
+                        <input type="text" name="no_ktp" id="no_ktp"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_hp">No. HP</label>
+                        <input type="text" name="no_hp" id="no_hp"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="email">Email</label>
+                        <input type="text" name="email" id="email"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="password">Password</label>
+                        <input type="password" name="password" id="password"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <button
+                        class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+                        type="submit">Tambah</button>
+                </form>
+            @else
+                <form class="flex flex-col" method="POST" action="{{ route('editPasienProses', $pasien->id) }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama">Nama</label>
+                        <input type="text" value="{{ $pasien->nama }}" name="nama" id="nama"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="alamat">Alamat</label>
+                        <input type="text" value="{{ $pasien->alamat }}" name="alamat" id="alamat"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_ktp">No. KTP</label>
+                        <input type="text" value="{{ $pasien->no_ktp }}" name="no_ktp" id="no_ktp"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="no_hp">No. HP</label>
+                        <input type="text" value="{{ $pasien->no_hp }}" name="no_hp" id="no_hp"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="email">Email</label>
+                        <input type="text" value="{{ $pasien->user->email }}" name="email" id="email"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="password">Password lama</label>
+                        <input type="password" name="password-lama" id="password-lama"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="password">Password baru</label>
+                        <input type="password" name="password-baru" id="password password-baru"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <button
+                        class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+                        type="submit">Edit</button>
+                </form>
+            @endif
+
         </section>
     </div>
     {{-- /tambah dokter --}}

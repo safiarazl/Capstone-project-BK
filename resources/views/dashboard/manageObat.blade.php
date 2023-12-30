@@ -139,15 +139,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($obats as $obat)
+                    @foreach ($obats as $obatTable)
                         <tr>
-                            <td>{{ $obat->nama_obat }}</td>
-                            <td>{{ $obat->kemasan }}</td>
-                            <td>{{ $obat->harga }}</td>
+                            <td>{{ $obatTable->nama_obat }}</td>
+                            <td>{{ $obatTable->kemasan }}</td>
+                            <td>{{ $obatTable->harga }}</td>
                             <td class="flex flex-cols-1 place-content-center">
-                                <a href="{{ route('editObat', $obat->id) }}"
+                                <a href="{{ route('editObat', $obatTable->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</a>
-                                <form action="{{ route('deleteObatProses', $obat->id) }}" method="POST">
+                                <form action="{{ route('deleteObatProses', $obatTable->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
@@ -171,31 +171,61 @@
     {{-- tambah poli --}}
     <main class="container w-full md:w-4/5 mx-auto px-2">
         <section>
-            <h3 class="font-bold text-2xl">Tambah Obat</h3>
+            @if ($operation == 'noedit')
+                <h3 class="font-bold text-2xl">Tambah Obat</h3>
+            @else
+                <h3 class="font-bold text-2xl">Edit Obat</h3>
+            @endif
         </section>
 
         <section class="mt-10">
-            <form class="flex flex-col" method="POST" action="{{ route('tambahObatProses') }}">
-                @csrf
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama_obat">Nama Obat</label>
-                    <input type="text" name="nama_obat" id="nama_obat"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="kemasan">Kemasan</label>
-                    <input type="text" name="kemasan" id="kemasan"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <div class="mb-6 pt-3 rounded bg-gray-200">
-                    <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="harga">Harga</label>
-                    <input type="number" name="harga" id="harga"
-                        class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
-                </div>
-                <button
-                    class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-                    type="submit">Tambah</button>
-            </form>
+            @if ($operation == 'noedit')
+                <form class="flex flex-col" method="POST" action="{{ route('tambahObatProses') }}">
+                    @csrf
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama_obat">Nama Obat</label>
+                        <input type="text" name="nama_obat" id="nama_obat"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="kemasan">Kemasan</label>
+                        <input type="text" name="kemasan" id="kemasan"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="harga">Harga</label>
+                        <input type="number" name="harga" id="harga"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <button
+                        class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+                        type="submit">Tambah</button>
+                </form>
+            @else
+                <form class="flex flex-col" method="POST" action="{{ route('editObatProses', $obat->id) }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="nama_obat">Nama Obat</label>
+                        <input type="text" value="{{ $obat->nama_obat }}" name="nama_obat" id="nama_obat"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="kemasan">Kemasan</label>
+                        <input type="text" value="{{ $obat->kemasan }}" name="kemasan" id="kemasan"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <div class="mb-6 pt-3 rounded bg-gray-200">
+                        <label class="block text-gray-700 text-sm font-bold mb-2 ml-3" for="harga">Harga</label>
+                        <input type="number" value="{{ $obat->harga }}" name="harga" id="harga"
+                            class="bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 border-gray-300 focus:border-purple-600 transition duration-500 px-3 pb-3">
+                    </div>
+                    <button
+                        class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+                        type="submit">Edit</button>
+                </form>
+            @endif
+
         </section>
     </main>
     {{-- /tambah poli --}}
