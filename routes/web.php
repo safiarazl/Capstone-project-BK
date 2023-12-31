@@ -72,6 +72,8 @@ route::middleware(['auth', 'checkRole:dokter'])->group(function () {
     Route::put('dokter/change-profile-proses/{id}', [DokterDashboard::class, 'changeProfileProses'])->name('changeProfileProses');
 
     Route::post('dokter/input-jadwal-proses', [DokterDashboard::class, 'inputJadwalProses'])->name('inputJadwalProses');
+
+    Route::get('dokter/periksa-pasien', [DokterDashboard::class, 'periksaPasien'])->name('periksaPasien');
 });
 
 route::middleware(['auth', 'checkRole:pasien'])->group(function () {

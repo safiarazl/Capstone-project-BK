@@ -17,6 +17,14 @@ class DokterDashboard extends Controller
         return view('dashboard.dashboard');
     }
 
+    public function periksaPasien(){
+        // $user = auth()->user();
+        // $dokter = Dokter::where('id_akun', $user->id)->first();
+        // $jadwal = Jadwal_periksa::where('id_dokter', $dokter->id)->get();
+        // // dd($user, $dokter, $jadwal);
+        return view('dokter.periksaDokter');
+    }
+
     public function changeProfile()
     {
         $user = auth()->user();

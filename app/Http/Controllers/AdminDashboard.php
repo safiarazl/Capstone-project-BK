@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\daftar_poli;
 use Illuminate\Http\Request;
 use App\Models\Dokter; // Add this line to import the 'Dokter' class
 use App\Models\User; // Add this line to import the 'User' class
@@ -25,12 +26,37 @@ class AdminDashboard extends Controller
             return view('dashboard.dashboard', compact('user', 'dokter', 'pasien', 'poli', 'obat'));
         } else if (auth()->user()->role == 'dokter') {
             $cekJadwal = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->get();
-            // dd($cekJadwal);
-            return view('dashboard.dashboard', compact('cekJadwal') );
-
+            $operation = 'input';
+            $dayToday = date('l');
+            $hari = [
+                'Senin' => 'Monday',
+                'Selasa' => 'Tuesday',
+                'Rabu' => 'Wednesday',
+                'Kamis' => 'Thursday',
+                'Jumat' => 'Friday',
+                'Sabtu' => 'Saturday',
+                'Minggu' => 'Sunday',
+            ];
+            $keys = array_keys($hari);
+            // dd($cekJadwal[0]->hari, array_search($dayToday, $hari));
+            if ($cekJadwal->count() > 0) {
+                if ($cekJadwal[0]->hari == array_search($dayToday, $hari)) {
+                    $operation = 'noinput';
+                }
+                $operation = 'edit';
+            }
+            return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys'));
         } else if (auth()->user()->role == 'pasien') {
             $jadwals = Jadwal_periksa::with(['dokter.poli'])->get();
-            return view('dashboard.dashboard', compact('jadwals'));
+            $pasien = Pasien::where('id_akun', auth()->user()->id)->first();
+            $cekPendaftaran = daftar_poli::join('jadwal_periksa', 'daftar_poli.id_jadwal', '=', 'jadwal_periksa.id')
+                ->join('dokter', 'jadwal_periksa.id_dokter', '=', 'dokter.id')
+                ->join('poli', 'dokter.id_poli', '=', 'poli.id')
+                ->where('daftar_poli.id_pasien', $pasien->id)
+                ->select('daftar_poli.*', 'jadwal_periksa.*', 'poli.*', 'dokter.*')
+                ->get();
+            // dd($cekPendaftaran);
+            return view('dashboard.dashboard', compact('jadwals', 'cekPendaftaran'));
         }
 
         return view('dashboard.dashboard');

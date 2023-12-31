@@ -20,4 +20,14 @@ class Pasien extends Model
     {
         return $this->belongsTo(User::class, 'id_akun', 'id');
     }
+
+    public function daftar_poli()
+    {
+        return $this->hasMany(Daftar_poli::class, 'id_pasien');
+    }
+
+    public function jadwal_periksa()
+    {
+        return $this->hasManyThrough(Jadwal_periksa::class, Daftar_poli::class, 'id_pasien', 'id', 'id', 'id_jadwal');
+    }
 }

@@ -97,6 +97,41 @@
                 </div>
             </div>
         @elseif (Auth::user()->role == 'pasien')
+            {{-- error/success session --}}
+            @if (session('error'))
+                <div class="flex flex-col gap-3">
+                    <div
+                        class="flex bg-white dark:bg-gray-900 items-center px-6 py-4 text-sm border-t-2 rounded-b shadow-sm border-red-500">
+                        <svg viewBox="0 0 24 24" class="w-8 h-8 text-red-500 stroke-current" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 8V12V8ZM12 16H12.01H12ZM21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <div class="ml-3">
+                            <div class="font-bold text-left text-black dark:text-gray-50">Access denied</div>
+                            <div class="w-full text-gray-900 dark:text-gray-300 mt-1">{{ session('error') }}</div>
+                        </div>
+                    </div>
+                </div>
+            @elseif (session('success'))
+                <div class="flex flex-col gap-3">
+                    <div
+                        class="flex bg-white dark:bg-gray-900 items-center px-6 py-4 text-sm border-t-2 rounded-b shadow-sm border-green-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-green-500 stroke-current"
+                            fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                        <div class="ml-3">
+                            <div class="font-bold text-left text-black dark:text-gray-50">Your entry has been saved
+                            </div>
+                            <div class="w-full text-gray-900 dark:text-gray-300 mt-1">{{ session('success') }}</div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            {{-- /error/success session --}}
             <div class="mx-14 mt-10 border-2 border-blue-400 rounded-lg bg-white">
                 <div class="mt-3 text-center text-4xl font-bold">Pendaftaran Poliklinik</div>
                 <div class="p-8">
@@ -124,94 +159,64 @@
                         </div>
                         <div class="text-center">
                             <button type="submit"
-                                class="cursor-pointer rounded-lg bg-blue-700 px-8 py-5 text-sm font-semibold text-white">Book
-                                Appoinment</button>
+                                class="cursor-pointer rounded-lg bg-blue-700 px-8 py-5 text-sm font-semibold text-white">Daftar
+                                Poli</button>
                         </div>
                     </form>
                 </div>
             </div>
+            {{-- table di daftar poli pasien --}}
+            <div class="mx-14 mt-10 border-2 border-blue-400 rounded-lg bg-white">
+                <h2 class="text-2xl font-bold mb-4">Riwayat Daftar Poli</h2>
+                <table id="example" class="table-auto w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">Poli</th>
+                            <th class="px-4 py-2">Dokter</th>
+                            <th class="px-4 py-2">Hari</th>
+                            <th class="px-4 py-2">Mulai</th>
+                            <th class="px-4 py-2">Selesai</th>
+                            <th class="px-4 py-2">Antrian</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($cekPendaftaran as $pendaftaran)
+                            <tr>
+                                <td class="border px-4 py-2">{{ $pendaftaran->nama_poli }}</td>
+                                <td class="border px-4 py-2">{{ $pendaftaran->nama }}</td>
+                                <td class="border px-4 py-2">{{ $pendaftaran->hari }}</td>
+                                <td class="border px-4 py-2">{{ $pendaftaran->jam_mulai }}</td>
+                                <td class="border px-4 py-2">{{ $pendaftaran->jam_selesai }}</td>
+                                <td class="border px-4 py-2">{{ $pendaftaran->no_antrian }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+            <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+            <script>
+                $(document).ready(function() {
+                    $('#example').DataTable({
+                        // Add any customization options here
+                    });
+                });
+            </script>
+            {{-- /table di daftar poli pasien --}}
         @elseif (Auth::user()->role == 'dokter')
             <div class="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-lg overflow-hidden">
                 <div class="text-2xl py-4 px-6 bg-gray-900 text-white text-center font-bold uppercase">
                     Input Jadwal
                 </div>
-                <form class="py-4 px-6" action="{{ route('inputJadwalProses') }}" method="POST">
-                    @csrf
-                    <div class="mb-4">
-                        <label class="block text-gray-700 font-bold mb-2" for="service">
-                            Hari
-                        </label>
-                        @if ($cekJadwal->count() != 0)
-                            <select
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="hari" name="hari" disabled>
-                                @foreach ($cekJadwal as $jadwal)
-                                    <option value="{{ $jadwal->hari }}"> {{ $jadwal->hari }} </option>
-                                @endforeach
-
-                            </select>
-                        @elseif ($cekJadwal->count() == 0)
-                            <select
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="hari" name="hari">
-                                <option value="">Pilih Hari</option>
-                                <option value="Senin">Senin</option>
-                                <option value="Selasa">Selasa</option>
-                                <option value="Rabu">Rabu</option>
-                                <option value="Kamis">Kamis</option>
-                                <option value="Jumat">Jumat</option>
-                                <option value="Sabtu">Sabtu</option>
-                            </select>
-                        @endif
-                    </div>
-                    @if ($cekJadwal->count() != 0)
-                        @foreach ($cekJadwal as $jadwal)
-                            <div class="mb-4">
-                                <label class="block text-gray-700 font-bold mb-2" for="time">
-                                    Jam Mulai
-                                </label>
-                                <input
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="" name="" type="time" value="{{ $jadwal->jam_mulai }}"
-                                    disabled>
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-gray-700 font-bold mb-2" for="time">
-                                    Jam Selesai
-                                </label>
-                                <input
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="" name="" type="time"
-                                    value="{{ $jadwal->jam_selesai }}" disabled>
-                            </div>
-                        @endforeach
-                    @elseif ($cekJadwal->count() == 0)
-                        <div class="mb-4">
-                            <label class="block text-gray-700 font-bold mb-2" for="time">
-                                Jam Mulai
-                            </label>
-                            <input
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="jam_mulai" name="jam_mulai" type="time">
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 font-bold mb-2" for="time">
-                                Jam Selesai
-                            </label>
-                            <input
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="jam_selesai" name="jam_selesai" type="time">
-                        </div>
-                    @endif
-                    <div class="flex items-center justify-center mb-4">
-                        <button
-                            class="bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline"
-                            type="submit">
-                            Submit
-                        </button>
-                    </div>
-
-                </form>
+                @if ($operation == 'input')
+                    @include('dokter.formInput')
+                @elseif ($operation == 'edit')
+                    @include('dokter.formEdit')
+                @else
+                    @include('dokter.formInputDisable')
+                @endif
             </div>
         @endif
 
