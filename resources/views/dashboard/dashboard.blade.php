@@ -214,7 +214,7 @@
                     @include('dokter.formInput')
                 @elseif ($operation == 'edit')
                     @include('dokter.formEdit')
-                @else
+                @elseif ($operation == 'noinput')
                     @include('dokter.formInputDisable')
                 @endif
             </div>

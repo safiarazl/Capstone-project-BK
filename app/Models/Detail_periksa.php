@@ -14,4 +14,9 @@ class detail_periksa extends Model
     public $incrementing = true;
     public $timestamps = false;
     protected $fillable = ['id_periksa', 'id_obat'];
+
+    public function obat()
+{
+    return $this->belongsTo(Obat::class, 'id_obat');
+}
 }

@@ -1,5 +1,6 @@
-<form class="py-4 px-6" action="{{ route('inputJadwalProses') }}" method="POST">
+<form class="py-4 px-6" action="{{ route('editJadwalProses') }}" method="POST">
     @csrf
+    @method('PUT')
     @foreach ($cekJadwal as $jadwal)
         <div class="mb-4">
             <label class="block text-gray-700 font-bold mb-2" for="service">

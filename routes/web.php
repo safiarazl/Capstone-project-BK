@@ -72,8 +72,13 @@ route::middleware(['auth', 'checkRole:dokter'])->group(function () {
     Route::put('dokter/change-profile-proses/{id}', [DokterDashboard::class, 'changeProfileProses'])->name('changeProfileProses');
 
     Route::post('dokter/input-jadwal-proses', [DokterDashboard::class, 'inputJadwalProses'])->name('inputJadwalProses');
+    Route::put('dokter/edit-jadwal-proses', [DokterDashboard::class,'editJadwalProses'])->name('editJadwalProses');
 
     Route::get('dokter/periksa-pasien', [DokterDashboard::class, 'periksaPasien'])->name('periksaPasien');
+    Route::get('dokter/periksa-pasien/{id_pasien}', [DokterDashboard::class, 'periksaPasienProses'])->name('periksaPasienProses');
+    Route::put('dokter/periksa-pasien-proses/{id_pasien}', [DokterDashboard::class, 'periksaPasienProsesInsert'])->name('periksaPasienProsesInsert');
+
+    Route::get('dokter/riwayat-periksa', [DokterDashboard::class, 'riwayatPeriksa'])->name('riwayatPeriksa');
 });
 
 route::middleware(['auth', 'checkRole:pasien'])->group(function () {

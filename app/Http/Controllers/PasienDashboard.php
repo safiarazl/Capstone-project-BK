@@ -44,6 +44,7 @@ class PasienDashboard extends Controller
             'id_jadwal' => (int) $jadwalInput,
             'keluhan' => $keluhan,
             'no_antrian' => (int) $this->generateNoAntrian($jadwalInput),
+            'status' => 'daftar',
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Berhasil mendaftar poli!');

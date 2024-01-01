@@ -8,9 +8,11 @@
             <select
                 class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="hari" name="hari" disabled>
-                @foreach ($hari as $poli)
-                    <option value="{{ $poli }}" @if ($poli == $jadwal->hari) selected @endif>
-                        {{ ucwords(strtolower($poli)) }}</option>
+                @foreach ($keys as $hari)
+                    @if ($hari != 'Minggu')
+                        <option value="{{ $hari }}" @if ($hari == $jadwal->hari) selected @endif>
+                            {{ ucwords(strtolower($hari)) }}</option>
+                    @endif
                 @endforeach
             </select>
         </div>

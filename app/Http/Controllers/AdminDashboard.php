@@ -26,7 +26,8 @@ class AdminDashboard extends Controller
             return view('dashboard.dashboard', compact('user', 'dokter', 'pasien', 'poli', 'obat'));
         } else if (auth()->user()->role == 'dokter') {
             $cekJadwal = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->get();
-            $operation = 'input';
+            $operation = '';
+            date_default_timezone_set('Asia/Jakarta');
             $dayToday = date('l');
             $hari = [
                 'Senin' => 'Monday',
@@ -38,13 +39,14 @@ class AdminDashboard extends Controller
                 'Minggu' => 'Sunday',
             ];
             $keys = array_keys($hari);
-            // dd($cekJadwal[0]->hari, array_search($dayToday, $hari));
-            if ($cekJadwal->count() > 0) {
-                if ($cekJadwal[0]->hari == array_search($dayToday, $hari)) {
-                    $operation = 'noinput';
-                }
+            if ($cekJadwal->count() > 0 && $cekJadwal[0]->hari != array_search($dayToday, $hari)) {
                 $operation = 'edit';
+            } else if ($cekJadwal[0]->hari == array_search($dayToday, $hari)) {
+                $operation = 'noinput';
+            } else {
+                $operation = 'input';
             }
+            // dd($cekJadwal[0]->hari, array_search($dayToday, $hari), $operation, $cekJadwal);
             return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys'));
         } else if (auth()->user()->role == 'pasien') {
             $jadwals = Jadwal_periksa::with(['dokter.poli'])->get();
@@ -299,7 +301,7 @@ class AdminDashboard extends Controller
         $user = User::where('id', $dokter->id_akun)->first();
         $dokter->delete();
         $user->delete();
-        return redirect('/manage-dokter')->with('success', 'Dokter deleted successfully!');
+        return redirect()->route('manageDokter')->with('success', 'Dokter deleted successfully!');
     }
 
     public function tambahDokterProses(Request $request)
@@ -328,7 +330,7 @@ class AdminDashboard extends Controller
             'no_hp' => $request->input('no_hp'),
         ]);
 
-        return redirect('/manage-dokter')->with('success', 'Dokter added successfully!');
+        return redirect()->route('manageDokter')->with('success', 'Dokter added successfully!');
     }
 
     public function editDokterProses($id, Request $request)
@@ -362,6 +364,6 @@ class AdminDashboard extends Controller
             'password' => $request->input('password-baru'),
         ]);
 
-        return redirect('/manage-dokter')->with('success', 'Dokter updated successfully!');
+        return redirect()->route('manageDokter')->with('success', 'Dokter updated successfully!');
     }
 }

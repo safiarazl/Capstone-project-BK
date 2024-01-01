@@ -18,7 +18,6 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.js"></script>
 
-
     <style>
         .bg-black-alt {
             background: #191919;
@@ -31,6 +30,7 @@
         .border-black-alt {
             border-color: #191919;
         }
+
         /* new style */
         /*Overrides for Tailwind CSS */
 
@@ -121,6 +121,7 @@
             background-color: #667eea !important;
             /*bg-indigo-500*/
         }
+
         /* /new style */
     </style>
 
