@@ -15,9 +15,9 @@ use App\Http\Controllers\PasienDashboard;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::middleware(['guest'])->group(function () {
     Route::get('login', [LogRegController::class, 'loginForm'])->name('login');
