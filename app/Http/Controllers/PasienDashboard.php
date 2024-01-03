@@ -32,7 +32,7 @@ class PasienDashboard extends Controller
         if ($histDaftarPolis->count() > 0) {
             foreach ($histDaftarPolis as $histDaftarPoli) {
                 foreach ($jadwals as $jadwal) {
-                    if ($histDaftarPoli->id_jadwal == $jadwal->id && $jadwal->id == $jadwalInput) {
+                    if ($histDaftarPoli->id_jadwal == $jadwal->id && $jadwal->id == $jadwalInput && $histDaftarPoli->status == 'daftar') {
                         return redirect()->route('dashboard')->with('error', 'Anda sudah mendaftar poli!');
                     }
                 }
