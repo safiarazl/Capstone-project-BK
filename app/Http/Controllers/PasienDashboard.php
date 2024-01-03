@@ -40,10 +40,10 @@ class PasienDashboard extends Controller
         }
 
         daftar_poli::create([
-            'id_pasien' => (int) $pasien->id,
-            'id_jadwal' => (int) $jadwalInput,
+            'id_pasien' => $pasien->id,
+            'id_jadwal' => $jadwalInput,
             'keluhan' => $keluhan,
-            'no_antrian' => (int) $this->generateNoAntrian($jadwalInput),
+            'no_antrian' => $this->generateNoAntrian($jadwalInput),
             'status' => 'daftar',
         ]);
 

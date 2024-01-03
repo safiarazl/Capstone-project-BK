@@ -14,6 +14,7 @@
                     <th class="px-4 py-2">Tanggal Periksa</th>
                     <th class="px-4 py-2">Catatan</th>
                     <th class="px-4 py-2">Obat</th>
+                    <th class="px-4 py-2">Biaya Periksa</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,9 +26,10 @@
                         <td class="border px-4 py-2">{{ $item['catatan'] }}</td>
                         <td class="border px-4 py-2">
                             @foreach ($item['obat'] as $obat)
-                                {{ $obat['nama_obat'] }}<br>
+                            {{ $obat['nama_obat'] }}<br>
                             @endforeach
                         </td>
+                        <td class="border px-4 py-2">{{ $item['biaya_periksa'] }}</td>
                     </tr>
                 @endforeach
             </tbody>

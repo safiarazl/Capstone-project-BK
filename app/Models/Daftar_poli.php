@@ -13,7 +13,7 @@ class daftar_poli extends Model
     protected $keyType = 'int';
     public $incrementing = true;
     public $timestamps = false;
-    protected $fillable = ['id_pasien', 'id_jadwal', 'keluhan', 'no_antrian'];
+    protected $fillable = ['id_pasien', 'id_jadwal', 'keluhan', 'no_antrian', 'status'];
 
     public function pasien()
     {

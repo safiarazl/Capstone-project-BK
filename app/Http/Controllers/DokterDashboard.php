@@ -34,7 +34,7 @@ class DokterDashboard extends Controller
             ->join('jadwal_periksa', 'daftar_poli.id_jadwal', '=', 'jadwal_periksa.id')
             ->where('daftar_poli.status', 'selesai')
             ->where('jadwal_periksa.id_dokter', $id_dokter)
-            ->select('pasien.nama', 'daftar_poli.keluhan', 'periksa.tgl_periksa', 'periksa.catatan', 'periksa.id as id_periksa')
+            ->select('pasien.nama', 'daftar_poli.keluhan', 'periksa.tgl_periksa', 'periksa.catatan', 'periksa.id as id_periksa', 'periksa.biaya_periksa')
             ->get();
 
         foreach ($oldPasien as $value) {
@@ -52,6 +52,7 @@ class DokterDashboard extends Controller
                 'tgl_periksa' => $value->tgl_periksa,
                 'catatan' => $value->catatan,
                 'obat' => $obat,
+                'biaya_periksa' => $value->biaya_periksa,
             ];
         }
 
@@ -69,6 +70,7 @@ class DokterDashboard extends Controller
             ->join('poli', 'dokter.id_poli', '=', 'poli.id')
             ->join('pasien', 'daftar_poli.id_pasien', '=', 'pasien.id')
             ->where('jadwal_periksa.id_dokter', $dokter->id)
+            ->where('daftar_poli.status', 'daftar')
             ->select('daftar_poli.*', 'jadwal_periksa.*', 'poli.*', 'dokter.*', 'pasien.*')
             ->get();
         $allObat = Obat::all();
