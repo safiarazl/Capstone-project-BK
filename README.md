@@ -45,10 +45,10 @@ Selamat datang di projek Laravel Capstone-project-BK! Ikuti langkah-langkah di b
 | role   | email           | password |
 | ------ | --------------- | -------- |
 | Admin  | admin@gmail.com  | admin@gmail.com      |
-| Doctor | SafiarDokter@mail.com  | 123     |
-| Doctor | DeoDokter@mail.com     | 123     |
-| Pasien | DeoPasien@mail.com  | 123      |
-| Pasien | YudisPasien@mail.com | 123      |
+| Doctor | SafiarDokter@gmail.com  | 123     |
+| Doctor | DeoDokter@gmail.com     | 123     |
+| Pasien | DeoPasien@gmail.com  | 123      |
+| Pasien | YudisPasien@gmail.com | 123      |
 
 ## Langkah Tambahan
 
