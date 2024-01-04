@@ -22,23 +22,23 @@ Selamat datang di projek Laravel keren saya! Ikuti langkah-langkah di bawah untu
     copy .env.example .env
     ```
 
-4. Import file SQL yang ada ke dalam database/
+4. Import file SQL yang ada ke dalam database.
 
-4. Edit file `.env` ganti nama database yang ada didalamnya.
+5. Edit file `.env` ganti nama database yang ada didalamnya.
 
-5. Generate kunci aplikasi:
+6. Generate kunci aplikasi:
 
     ```bash
     php artisan key:generate
     ```
 
-6. Jalankan server pengembangan:
+7. Jalankan server pengembangan:
 
     ```bash
     php artisan serve
     ```
 
-7. Buka web browser dan kunjungi.
+8. Buka web browser dan kunjungi.
 
 ## Langkah Tambahan
 
