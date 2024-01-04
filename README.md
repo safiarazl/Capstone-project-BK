@@ -1,3 +1,68 @@
+# Projek Laravel Capstone-project-BK
+
+Selamat datang di projek Laravel Capstone-project-BK! Ikuti langkah-langkah di bawah untuk menjalankannya.
+
+## Instalasi
+
+1. Clone repository:
+
+    ```bash
+    git clone https://github.com/safiarazl/Capstone-project-BK.git
+    ```
+
+2. Instal dependensi menggunakan Composer:
+
+    ```bash
+    composer install
+    ```
+
+3. Salin file `.env.example` menjadi `.env`:
+
+    ```bash
+    copy .env.example .env
+    ```
+
+4. Import file SQL yang ada ke dalam database.
+
+5. Edit file `.env` ganti nama database yang ada didalamnya.
+
+6. Generate kunci aplikasi:
+
+    ```bash
+    php artisan key:generate
+    ```
+
+7. Jalankan server pengembangan:
+
+    ```bash
+    php artisan serve
+    ```
+
+8. Buka web browser dan kunjungi.
+
+## Login to the app:
+
+| role   | email           | password |
+| ------ | --------------- | -------- |
+| Admin  | admin@gmail.com  | admin@gmail.com      |
+| Doctor | SafiarDokter@gmail.com  | 123     |
+| Doctor | DeoDokter@gmail.com     | 123     |
+| Pasien | DeoPasien@gmail.com  | 123      |
+| Pasien | YudisPasien@gmail.com | 123      |
+
+## Langkah Tambahan
+
+- Anda mungkin perlu mengonfigurasi pengaturan lainnya di file `.env` berdasarkan kebutuhan proyek Anda.
+
+- Jelajahi dan sesuaikan projek sesuai kebutuhan Anda!
+
+## Berkontribusi
+
+Jika Anda menemukan masalah atau memiliki perbaikan yang disarankan, jangan ragu untuk membuka isu atau membuat permintaan tarik.
+
+Selamat coding!
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
