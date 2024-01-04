@@ -40,6 +40,16 @@ Selamat datang di projek Laravel Capstone-project-BK! Ikuti langkah-langkah di b
 
 8. Buka web browser dan kunjungi.
 
+## Login to the app:
+
+| role   | email           | password |
+| ------ | --------------- | -------- |
+| Admin  | admin@gmail.com  | admin@gmail.com      |
+| Doctor | SafiarDokter@mail.com  | 123     |
+| Doctor | DeoDokter@mail.com     | 123     |
+| Pasien | DeoPasien@mail.com  | 123      |
+| Pasien | YudisPasien@mail.com | 123      |
+
 ## Langkah Tambahan
 
 - Anda mungkin perlu mengonfigurasi pengaturan lainnya di file `.env` berdasarkan kebutuhan proyek Anda.
