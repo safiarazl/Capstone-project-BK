@@ -1,6 +1,6 @@
-# Projek Laravel Keren Saya
+# Projek Laravel Capstone-project-BK
 
-Selamat datang di projek Laravel keren saya! Ikuti langkah-langkah di bawah untuk menjalankannya.
+Selamat datang di projek Laravel Capstone-project-BK! Ikuti langkah-langkah di bawah untuk menjalankannya.
 
 ## Instalasi
 
