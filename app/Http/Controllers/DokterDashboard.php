@@ -102,6 +102,7 @@ class DokterDashboard extends Controller
             ->join('poli', 'dokter.id_poli', '=', 'poli.id')
             ->join('pasien', 'daftar_poli.id_pasien', '=', 'pasien.id')
             ->where('jadwal_periksa.id_dokter', $dokter->id)
+            ->where('daftar_poli.status', 'daftar')
             ->select('daftar_poli.*', 'jadwal_periksa.*', 'poli.*', 'dokter.*', 'pasien.*')
             ->get();
 

@@ -39,6 +39,7 @@ class AdminDashboard extends Controller
                 'Minggu' => 'Sunday',
             ];
             $keys = array_keys($hari);
+            // dd($cekJadwal[0]->hari , array_search($dayToday, $hari));
             if ($cekJadwal->count() > 0 && $cekJadwal[0]->hari != array_search($dayToday, $hari)) {
                 $operation = 'edit';
             } else if ($cekJadwal[0]->hari == array_search($dayToday, $hari)) {
