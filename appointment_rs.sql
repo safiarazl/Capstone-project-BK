@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 04 Jan 2024 pada 04.40
+-- Waktu pembuatan: 05 Jan 2024 pada 16.04
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -65,12 +65,14 @@ CREATE TABLE `daftar_poli` (
 
 INSERT INTO `daftar_poli` (`id`, `id_pasien`, `id_jadwal`, `keluhan`, `no_antrian`, `status`) VALUES
 (8, 18, 1, 'sakit untu', 1, 'selesai'),
-(9, 18, 2, 'sakit umum 1', 1, 'selesai'),
-(11, 19, 2, 'ga sakit, mau ke poli umum aja', 2, 'selesai'),
+(9, 18, NULL, 'sakit umum 1', 1, 'selesai'),
+(11, 19, NULL, 'ga sakit, mau ke poli umum aja', 2, 'selesai'),
 (12, 19, 1, 'ga sakit gigi', 2, 'selesai'),
 (13, 18, 6, 'Susah tidur', 1, 'selesai'),
 (18, 21, 1, 'gigi', 3, 'selesai'),
-(19, 21, 1, 'gigi lagi', 4, 'selesai');
+(19, 21, 1, 'gigi lagi', 4, 'selesai'),
+(20, 18, 1, 'cekccek', 5, 'selesai'),
+(21, 19, 7, 'turuu', 1, 'selesai');
 
 -- --------------------------------------------------------
 
@@ -103,7 +105,17 @@ INSERT INTO `detail_periksa` (`id`, `id_periksa`, `id_obat`) VALUES
 (33, 15, 2),
 (34, 15, 3),
 (35, 15, 4),
-(36, 15, 5);
+(36, 15, 5),
+(37, 16, 1),
+(38, 16, 2),
+(39, 16, 3),
+(40, 16, 4),
+(41, 16, 5),
+(42, 17, 1),
+(43, 17, 2),
+(44, 17, 3),
+(45, 17, 4),
+(46, 17, 5);
 
 -- --------------------------------------------------------
 
@@ -126,11 +138,11 @@ CREATE TABLE `dokter` (
 
 INSERT INTO `dokter` (`id`, `id_akun`, `id_poli`, `nama`, `alamat`, `no_hp`) VALUES
 (10, 23, 6, 'Deo A', 'pemalang', '08887278634'),
-(11, 24, 5, 'Yudis', 'Kab. Semarang', '08887278634'),
 (12, 25, 5, 'Nantalira', 'Batang', '088872786342'),
 (13, 29, 6, 'Ardi', 'Sorong', '08887278634'),
 (15, 32, 7, 'Safiar Azalia', 'Demak', '088872786342'),
-(16, 33, 6, 'asdasdasd', 'asdasdasd', '08887278634');
+(16, 33, 6, 'Gigi', 'gigi tua', '08887278634'),
+(17, 36, 7, 'Dian', 'purwodadi', '0812097341289');
 
 -- --------------------------------------------------------
 
@@ -167,9 +179,9 @@ CREATE TABLE `jadwal_periksa` (
 --
 
 INSERT INTO `jadwal_periksa` (`id`, `id_dokter`, `hari`, `jam_mulai`, `jam_selesai`) VALUES
-(1, 10, 'Senin', '08:00:00', '10:00:00'),
-(2, 11, 'Selasa', '10:00:00', '12:02:00'),
-(6, 15, 'Senin', '15:00:00', '18:00:00');
+(1, 10, 'Jumat', '08:00:00', '10:00:00'),
+(6, 15, 'Senin', '15:00:00', '18:00:00'),
+(7, 17, 'Jumat', '12:12:00', '21:57:00');
 
 -- --------------------------------------------------------
 
@@ -279,7 +291,9 @@ INSERT INTO `periksa` (`id`, `id_daftar_poli`, `tgl_periksa`, `catatan`, `biaya_
 (12, 12, '2024-01-01 22:23:27', 'lagi coba', 306800),
 (13, 13, '2024-01-03 12:31:20', 'dikasi obat tidur', 239000),
 (14, 18, '2024-01-03 18:14:36', 'berhasil', 239000),
-(15, 19, '2024-01-03 18:25:57', 'lagilagi gigi', 312800);
+(15, 19, '2024-01-03 18:25:57', 'lagilagi gigi', 312800),
+(16, 20, '2024-01-04 23:22:28', 'asdasdasdasdasdasdas', 312800),
+(17, 21, '2024-01-05 21:54:05', 'sembuh', 312800);
 
 -- --------------------------------------------------------
 
@@ -319,7 +333,8 @@ CREATE TABLE `poli` (
 INSERT INTO `poli` (`id`, `nama_poli`, `keterangan`) VALUES
 (5, 'Poli Umum', 'Dokter Umum'),
 (6, 'Poli Gigi', 'Dokter Gigi'),
-(7, 'Poli Tidur', 'turu');
+(7, 'Poli Tidur', 'turu'),
+(10, 'Poli Atraksi', 'stuntmen banget');
 
 -- --------------------------------------------------------
 
@@ -346,16 +361,16 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `role`) VALUES
 (5, 'admin', 'admin@gmail.com', NULL, '$2y$12$hAbH2mZIOxQHQ68b7g6.CO4MBbMhT.cSKSKlre49d5RqJdup93E2u', NULL, '2023-12-28 03:01:05', '2023-12-28 03:01:05', 'admin'),
 (23, 'Deo A', 'DeoDokter@gmail.com', NULL, '$2y$12$h/CrH9YIm40W01Iq/9QE0Oo8xT8o7AsHM5pTSjRr.gnv0eyS0C1zS', NULL, '2023-12-29 10:37:57', '2023-12-30 04:50:48', 'dokter'),
-(24, 'Yudis', 'YudisDokter@gmail.com', NULL, '$2y$12$r4QpHxH7fUXZWAYjFqIdv.3EOCbQGC31anIfF0I2wPa8Wm2gUKiiq', NULL, '2023-12-29 10:43:06', '2023-12-29 21:56:43', 'dokter'),
 (25, 'Nantalira', 'NantaDokter@gmail.com', NULL, '$2y$12$BYviXs8J0yyZpYo7eAuYMOC69Kp53yZQ.04Lpc7JJuPXuEx3p4OG2', NULL, '2023-12-29 10:43:21', '2023-12-29 11:25:06', 'dokter'),
 (27, 'Nanta ler', 'NantaPasien@gmail.com', NULL, '$2y$12$ixRe4LgSEtYCTEOmXh1iwOLKkcnOf9wGscA.ZtOusOchKpooziMii', NULL, '2023-12-29 11:27:04', '2023-12-29 22:52:35', 'pasien'),
 (28, 'Deo', 'DeoPasien@gmail.com', NULL, '$2y$12$diT/BXkgXvp8vSb5IHbq5OIDf7NTeEmZJnzGQrqT5K853jmwaBUzO', NULL, '2023-12-29 11:27:23', '2023-12-29 22:52:50', 'pasien'),
 (29, 'Ardi', 'ArdiDokter@gmial.com', NULL, '$2y$12$IVYqQLqyrQMmQPBpfbuIYu/IIS6ko0/uWNeWBl0lHgir4j1b0bKMe', NULL, '2023-12-29 21:37:48', '2023-12-29 21:37:48', 'dokter'),
 (31, 'Safiar', 'SafiarPasien@gmail.com', NULL, '$2y$12$Ydfm6TS.YaxIy6eRTyGoa.nTnohaWm16//uZP1huhMq2FFosQw2eC', NULL, '2023-12-31 05:07:24', '2023-12-31 05:07:24', 'pasien'),
 (32, 'Safiar Azalia', 'SafiarDokter@gmail.com', NULL, '$2y$12$9kAudGZBS0kpdTCj87BD3uPNMYH9z0dth8zwqt0JRgdVIKHchQeme', NULL, '2023-12-31 05:21:15', '2023-12-31 05:21:15', 'dokter'),
-(33, 'asdasdasd', 'asdasd@gmail.com', NULL, '$2y$12$XN5XVqmjWk5iJl0tG8WgPeJVhZuPrgI749UFRm4G5prQ94hzef3ra', NULL, '2023-12-31 05:24:10', '2023-12-31 05:24:10', 'dokter'),
+(33, 'Gigi', 'GigiDokter@gmail.com', NULL, '$2y$12$OOeOav4EaG0X1KuJxhT/ke6iJRnWrr62aKGgZm5qBvxyMQflqjr.S', NULL, '2023-12-31 05:24:10', '2024-01-05 07:39:09', 'dokter'),
 (34, 'Yudis Pasien', 'YudisPasien@gmail.com', NULL, '$2y$12$hQVplbFgJp3//iYOcqLZsOfiQhBPNCPWuHkKeZtvyXzdiuk8ig5iy', NULL, '2024-01-02 22:29:08', '2024-01-02 22:29:08', 'pasien'),
-(35, 'Ardi', 'ArdiPasien@gmail.com', NULL, '$2y$12$fLilhZu9FrUfpgWqxWMu1.r/sOF36ReCj7QpXTa8WMMh7KJnSAoX6', NULL, '2024-01-03 03:31:12', '2024-01-03 03:31:12', 'pasien');
+(35, 'Ardi', 'ArdiPasien@gmail.com', NULL, '$2y$12$fLilhZu9FrUfpgWqxWMu1.r/sOF36ReCj7QpXTa8WMMh7KJnSAoX6', NULL, '2024-01-03 03:31:12', '2024-01-03 03:31:12', 'pasien'),
+(36, 'Dian', 'DianDokter@gmail.com', NULL, '$2y$12$/UQaL6tG/uZzf6C5pXxWYu2GagVJ6AlTTcQ/GfJb1byUXfQnVO3Ru', NULL, '2024-01-05 03:26:32', '2024-01-05 04:49:00', 'dokter');
 
 --
 -- Indexes for dumped tables
@@ -472,19 +487,19 @@ ALTER TABLE `akun`
 -- AUTO_INCREMENT untuk tabel `daftar_poli`
 --
 ALTER TABLE `daftar_poli`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT untuk tabel `detail_periksa`
 --
 ALTER TABLE `detail_periksa`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT untuk tabel `dokter`
 --
 ALTER TABLE `dokter`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT untuk tabel `failed_jobs`
@@ -496,7 +511,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT untuk tabel `jadwal_periksa`
 --
 ALTER TABLE `jadwal_periksa`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `migrations`
@@ -508,19 +523,19 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT untuk tabel `obat`
 --
 ALTER TABLE `obat`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `pasien`
 --
 ALTER TABLE `pasien`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT untuk tabel `periksa`
 --
 ALTER TABLE `periksa`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT untuk tabel `personal_access_tokens`
@@ -532,13 +547,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT untuk tabel `poli`
 --
 ALTER TABLE `poli`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
