@@ -39,7 +39,7 @@ class AdminDashboard extends Controller
                 'Minggu' => 'Sunday',
             ];
             $keys = array_keys($hari);
-            // dd($cekJadwal->count());
+            // dd($cekJadwal->toArray());
             if ($cekJadwal->count() == 0) {
                 $operation = 'input';
                 return view('dashboard.dashboard', compact('operation', 'keys'));
@@ -149,7 +149,7 @@ class AdminDashboard extends Controller
             'harga' => (int) $request->input('harga'),
         ]);
 
-        return redirect('/manage-obat')->with('success', 'Obat updated successfully!');
+        return redirect()->route('manageObat')->with('success', 'Obat updated successfully!');
     }
 
     public function tambahObatProses(Request $request)
@@ -166,14 +166,14 @@ class AdminDashboard extends Controller
             'harga' => (int) $request->input('harga'),
         ]);
 
-        return redirect('/manage-obat')->with('success', 'Obat added successfully!');
+        return redirect()->route('manageObat')->with('success', 'Obat added successfully!');
     }
 
     public function deleteObatProses($id)
     {
         $obat = Obat::where('id', $id)->first();
         $obat->delete();
-        return redirect('/manage-obat')->with('success', 'Obat deleted successfully!');
+        return redirect()->route('manageObat')->with('success', 'Obat deleted successfully!');
     }
 
     // admin pasien proses functions
@@ -209,7 +209,7 @@ class AdminDashboard extends Controller
             'password' => $request->input('password-baru'),
         ]);
 
-        return redirect('/manage-pasien')->with('success', 'Pasien updated successfully!');
+        return redirect()->route('managePasien')->with('success', 'Pasien updated successfully!');
     }
 
     public function tambahPasienProses(Request $request)
@@ -238,8 +238,7 @@ class AdminDashboard extends Controller
             'no_hp' => $request->input('no_hp'),
             'no_rm' => $this->generateNoRM(),
         ]);
-
-        return redirect('/manage-pasien')->with('success', 'Pasien added successfully!');
+        return redirect()->route('managePasien')->with('success', 'Pasien added successfully!');
     }
 
     protected function generateNoRM()
@@ -256,7 +255,7 @@ class AdminDashboard extends Controller
         $user = User::where('id', $pasien->id_akun)->first();
         $pasien->delete();
         $user->delete();
-        return redirect('/manage-pasien')->with('success', 'Pasien deleted successfully!');
+        return redirect()->route('managePasien')->with('success', 'Pasien deleted successfully!');
     }
 
     // admin poli proses functions
@@ -275,7 +274,7 @@ class AdminDashboard extends Controller
             'keterangan' => $request->input('keterangan'),
         ]);
 
-        return redirect('/manage-poli')->with('success', 'Poli updated successfully!');
+        return redirect()->route('managePoli')->with('success', 'Poli updated successfully!');
     }
     public function tambahPoliProses(Request $request)
     {
@@ -289,13 +288,13 @@ class AdminDashboard extends Controller
             'keterangan' => $request->input('keterangan'),
         ]);
 
-        return redirect('/manage-poli')->with('success', 'Poli added successfully!');
+        return redirect()->route('managePoli')->with('success', 'Poli updated successfully!');
     }
     public function deletePoliProses($id)
     {
         $poli = Poli::where('id', $id)->first();
         $poli->delete();
-        return redirect('/manage-poli')->with('success', 'Poli deleted successfully!');
+        return redirect()->route('managePoli')->with('success', 'Poli updated successfully!');
     }
     // admin dokter proses functions
     public function deleteDokterProses($id)
