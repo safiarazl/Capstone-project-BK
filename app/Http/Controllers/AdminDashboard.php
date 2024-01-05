@@ -39,15 +39,17 @@ class AdminDashboard extends Controller
                 'Minggu' => 'Sunday',
             ];
             $keys = array_keys($hari);
-            // dd($cekJadwal[0]->hari , array_search($dayToday, $hari));
-            if ($cekJadwal->count() > 0 && $cekJadwal[0]->hari != array_search($dayToday, $hari)) {
+            // dd($cekJadwal->count());
+            if ($cekJadwal->count() == 0) {
+                $operation = 'input';
+                return view('dashboard.dashboard', compact('operation', 'keys'));
+            } else if ($cekJadwal->count() > 0 && $cekJadwal[0]->hari != array_search($dayToday, $hari)) {
                 $operation = 'edit';
+                return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys'));
             } else if ($cekJadwal[0]->hari == array_search($dayToday, $hari)) {
                 $operation = 'noinput';
-            } else {
-                $operation = 'input';
+                return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys'));
             }
-            // dd($cekJadwal[0]->hari, array_search($dayToday, $hari), $operation, $cekJadwal);
             return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys'));
         } else if (auth()->user()->role == 'pasien') {
             $jadwals = Jadwal_periksa::with(['dokter.poli'])->get();

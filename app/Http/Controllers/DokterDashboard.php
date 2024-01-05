@@ -139,7 +139,6 @@ class DokterDashboard extends Controller
     public function periksaPasienProsesInsert(Request $request)
     {
         // dd($request->toArray());
-
         $request->validate([
             'id_daftar_poli' => 'required',
             'pilihan_obat' => 'required',
