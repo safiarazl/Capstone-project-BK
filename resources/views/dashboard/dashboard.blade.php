@@ -3,7 +3,6 @@
 @include('layout.header')
 <!--Container-->
 <div class="container w-full mx-auto pt-20">
-
     <div class="w-full px-4 md:px-0 md:mt-8 mb-16 text-gray-800 leading-normal">
         <!--Console Content-->
         @if (Auth::user()->role == 'admin')
@@ -206,12 +205,12 @@
             </script>
             {{-- /table di daftar poli pasien --}}
         @elseif (Auth::user()->role == 'dokter')
-            <div class="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-lg overflow-hidden">
+            <div class="max-w-xl mx-auto mt-10 bg-white shadow-lg rounded-lg overflow-hidden">
                 <div class="text-2xl py-4 px-6 bg-gray-900 text-white text-center font-bold uppercase">
-                    Input Jadwal
+                    Jadwal Periksa
                 </div>
                 @if ($operation == 'input')
-                    @include('dokter.formInput')
+                    @include('dokter.formInputNTable')
                 @elseif ($operation == 'edit')
                     @include('dokter.formEdit')
                 @elseif ($operation == 'noinput')

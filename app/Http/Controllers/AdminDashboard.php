@@ -26,7 +26,6 @@ class AdminDashboard extends Controller
             return view('dashboard.dashboard', compact('user', 'dokter', 'pasien', 'poli', 'obat'));
         } else if (auth()->user()->role == 'dokter') {
             $cekJadwal = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->get();
-            $operation = '';
             date_default_timezone_set('Asia/Jakarta');
             $dayToday = date('l');
             $hari = [
@@ -39,20 +38,31 @@ class AdminDashboard extends Controller
                 'Minggu' => 'Sunday',
             ];
             $keys = array_keys($hari);
-            // dd($cekJadwal->toArray());
-            if ($cekJadwal->count() == 0) {
-                $operation = 'input';
-                return view('dashboard.dashboard', compact('operation', 'keys'));
-            } else if ($cekJadwal->count() > 0 && $cekJadwal[0]->hari != array_search($dayToday, $hari)) {
-                $operation = 'edit';
-                return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys'));
-            } else if ($cekJadwal[0]->hari == array_search($dayToday, $hari)) {
-                $operation = 'noinput';
-                return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys'));
+            $operation = 'input';
+            $jadwal = "";
+            $jadwalDokters = [];
+            foreach ($cekJadwal as $key => $value) {
+                $jadwalDokters[] = [
+                    'id' => $value->id,
+                    'nama' => $value->dokter->nama,
+                    'hari' => $cekJadwal[$key]->hari,
+                    'jam_mulai' => $cekJadwal[$key]->jam_mulai,
+                    'jam_selesai' => $cekJadwal[$key]->jam_selesai,
+                    'status'=> $cekJadwal[$key]->aktif,
+                ];
             }
-            return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys'));
+            // dd($cekJadwal->toArray());
+            $cekJadwalAktif = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->where('aktif', 'Y')->get();
+            if (count($cekJadwalAktif) == 0) {
+                return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys', 'jadwalDokters'));
+            }
+            else if ($cekJadwalAktif[0]->hari == array_search($dayToday, $hari) ) {
+                $operation = 'noinput';
+                return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys', 'jadwalDokters'));
+            }
+            return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys', 'jadwalDokters'));
         } else if (auth()->user()->role == 'pasien') {
-            $jadwals = Jadwal_periksa::with(['dokter.poli'])->get();
+            $jadwals = Jadwal_periksa::with(['dokter.poli'])->where('aktif', 'Y')->get();
             $pasien = Pasien::where('id_akun', auth()->user()->id)->first();
             $cekPendaftaran = daftar_poli::join('jadwal_periksa', 'daftar_poli.id_jadwal', '=', 'jadwal_periksa.id')
                 ->join('dokter', 'jadwal_periksa.id_dokter', '=', 'dokter.id')

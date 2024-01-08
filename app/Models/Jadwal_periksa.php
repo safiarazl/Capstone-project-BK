@@ -13,7 +13,7 @@ class Jadwal_periksa extends Model
     protected $keyType = 'int';
     public $incrementing = true;
     public $timestamps = false;
-    protected $fillable = ['id_dokter', 'hari', 'jam_mulai', 'jam_selesai'];
+    protected $fillable = ['id_dokter', 'hari', 'jam_mulai', 'jam_selesai', 'aktif'];
 
     public function poli()
     {

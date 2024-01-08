@@ -168,46 +168,96 @@ class DokterDashboard extends Controller
         return redirect()->route('periksaPasien')->with('success', 'Berhasil memeriksa pasien!');
     }
 
-    public function editJadwalProses(Request $request)
+    public function editJadwal($id_jadwal)
+    {
+        $cekJadwal = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->get();
+        $jadwal = Jadwal_periksa::where('id', $id_jadwal)->first();
+        // dd($jadwal);
+        $operation = 'edit';
+        date_default_timezone_set('Asia/Jakarta');
+            $dayToday = date('l');
+            $hari = [
+                'Senin' => 'Monday',
+                'Selasa' => 'Tuesday',
+                'Rabu' => 'Wednesday',
+                'Kamis' => 'Thursday',
+                'Jumat' => 'Friday',
+                'Sabtu' => 'Saturday',
+                'Minggu' => 'Sunday',
+            ];
+            $keys = array_keys($hari);
+        $jadwalDokters = [];
+            foreach ($cekJadwal as $key => $value) {
+                $jadwalDokters[] = [
+                    'id' => $value->id,
+                    'nama' => $value->dokter->nama,
+                    'hari' => $cekJadwal[$key]->hari,
+                    'jam_mulai' => $cekJadwal[$key]->jam_mulai,
+                    'jam_selesai' => $cekJadwal[$key]->jam_selesai,
+                    'status'=> $cekJadwal[$key]->aktif,
+                ];
+            }
+        return view('dashboard.dashboard', compact('jadwal', 'cekJadwal', 'operation', 'jadwalDokters', 'dayToday', 'keys'));
+    }
+    public function editJadwalProses(Request $request, $id_jadwal)
     {
         $request->validate([
             'hari' => 'required',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
+            'status' => 'required',
         ]);
-
-        $user = auth()->user()->id;
-        $dokter = Dokter::where('id_akun', $user)->first();
+        $cekJadwal = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->get();
         $hari = $request->input('hari');
         $jam_mulai = $request->input('jam_mulai');
         $jam_selesai = $request->input('jam_selesai');
-
-        Jadwal_periksa::where('id_dokter', $dokter->id)->update([
+        if (request('status') == 'Y') {
+            foreach ($cekJadwal as $jadwal) {
+                Jadwal_periksa::where('id', $jadwal->id)->update([
+                    'aktif' => 'N',
+                ]);
+            }
+        }
+        Jadwal_periksa::where('id' , $id_jadwal)->update([
             'hari' => $hari,
             'jam_mulai' => $jam_mulai,
             'jam_selesai' => $jam_selesai,
+            'aktif' => request('status'),
         ]);
-        return redirect()->back()->with('success', 'Berhasil mengubah jadwal!');
+        return redirect()->route('dashboard')->with('success', 'Berhasil edit jadwal!');
     }
+
+    
+
     public function inputJadwalProses(Request $request)
     {
         $request->validate([
             'hari' => 'required',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
+            'status' => 'required',
         ]);
 
         $user = auth()->user()->id;
+        $cekJadwal = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->get();
         $dokter = Dokter::where('id_akun', $user)->first();
         $hari = $request->input('hari');
         $jam_mulai = $request->input('jam_mulai');
         $jam_selesai = $request->input('jam_selesai');
         // dd($dokter, $hari, $jam_mulai, $jam_selesai);
+        if (request('status') == 'Y') {
+            foreach ($cekJadwal as $jadwal) {
+                Jadwal_periksa::where('id', $jadwal->id)->update([
+                    'aktif' => 'N',
+                ]);
+            }
+        }
         Jadwal_periksa::create([
             'id_dokter' => (int) $dokter->id,
             'hari' => $hari,
             'jam_mulai' => $jam_mulai,
             'jam_selesai' => $jam_selesai,
+            'aktif' => request('status'),
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Berhasil menambah jadwal!');
