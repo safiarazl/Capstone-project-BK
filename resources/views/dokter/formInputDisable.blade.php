@@ -1,6 +1,6 @@
 {{-- table --}}
 <div class="container mx-auto max-w-full px-4 sm:px-6 lg:px-8 py-8 bg-white">
-    <h2 class="text-2xl font-bold mb-4">Input Datatable</h2>
+    <h2 class="text-2xl font-bold mb-4">Edit Datatable</h2>
     <table id="example" class="table-auto w-full">
         <thead>
             <tr>
@@ -24,8 +24,8 @@
                     <td class="border px-4 py-2">{{ isset($table['status']) ? $table['status'] : 'Status Not Found' }}
                     </td>
                     <td class="border px-4 py-2">
-                        <a href="{{ route('editJadwal', $table['id']) }}"
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Pilih</a>
+                        <span href="{{ route('editJadwal', $table['id']) }}"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Pilih</span>
                     </td>
                 </tr>
             @endforeach
@@ -48,55 +48,56 @@
     });
 </script>
 {{-- /table --}}
-<form class="py-4 px-6" action="{{ route('inputJadwalProses') }}" method="POST">
+<form class="py-4 px-6" action="{{ route('editJadwalProses', $jadwal->id) }}" method="POST">
     @csrf
-    <div class="mb-4">
-        <label class="block text-gray-700 font-bold mb-2" for="service">
-            Hari
-        </label>
-        <select
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="hari" name="hari">
-            @foreach ($keys as $hari)
-                @if ($hari != 'Minggu')
-                    <option value="{{ $hari }}">
-                        {{ ucwords(strtolower($hari)) }}</option>
-                @endif
-            @endforeach
-        </select>
-    </div>
-    <div class="mb-4">
-        <label class="block text-gray-700 font-bold mb-2" for="time">
-            Jam Mulai
-        </label>
-        <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="jam_mulai" name="jam_mulai" value="" type="time">
-    </div>
-    <div class="mb-4">
-        <label class="block text-gray-700 font-bold mb-2" for="time">
-            Jam Selesai
-        </label>
-        <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="jam_selesai" name="jam_selesai" type="time" value="">
-    </div>
-    <div class="mb-4">
-        <label class="block text-gray-700 font-bold mb-2" for="status">
-            Status
-        </label>
-        <div class="flex items-center">
-            <input type="radio" id="status_y" name="status" value="Y" class="mr-2">
-            <label for="status_y" class="mr-4">Aktif</label>
-            <input type="radio" id="status_n" name="status" value="N" class="mr-2">
-            <label for="status_n" class="mr-4">Tidak Aktif</label>
+    @method('PUT')
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="service">
+                Hari
+            </label>
+            <select
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" disabled
+                id="hari" name="hari">
+                @foreach ($keys as $hari)
+                    @if ($hari != 'Minggu')
+                        <option value="{{ $hari }}" @if ($hari == $jadwal->hari) selected @endif>
+                            {{ ucwords(strtolower($hari)) }}</option>
+                    @endif
+                @endforeach
+            </select>
         </div>
-    </div>
-    <div class="flex items-center justify-center mb-4">
-        <button
-            class="bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline"
-            type="submit">
-            Submit
-        </button>
-    </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="time">
+                Jam Mulai
+            </label>
+            <input
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="jam_mulai" name="jam_mulai" value="{{ $jadwal->jam_mulai }}" type="time" disabled>
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="time">
+                Jam Selesai
+            </label>
+            <input
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="jam_selesai" name="jam_selesai" type="time" value="{{ $jadwal->jam_selesai }}" disabled>
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="status">
+                Status
+            </label>
+            <div class="flex items-center">
+                <input type="radio" id="status_y" name="status" value="Y" class="mr-2" disabled>
+                <label for="status_y" class="mr-4">Aktif</label>
+                <input type="radio" id="status_n" name="status" value="N" class="mr-2" disabled>
+                <label for="status_n" class="mr-4">Tidak Aktif</label>
+            </div>
+        </div>
+        <div class="flex items-center justify-center mb-4">
+            <button
+                class="bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline"
+                type="submit">
+                Submit
+            </button>
+        </div>
 </form>

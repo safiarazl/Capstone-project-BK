@@ -197,6 +197,9 @@ class DokterDashboard extends Controller
                     'status'=> $cekJadwal[$key]->aktif,
                 ];
             }
+        if (array_search($dayToday, $hari) == $jadwal->hari){
+            $operation = 'noinput';
+        }
         return view('dashboard.dashboard', compact('jadwal', 'cekJadwal', 'operation', 'jadwalDokters', 'dayToday', 'keys'));
     }
     public function editJadwalProses(Request $request, $id_jadwal)
@@ -227,7 +230,7 @@ class DokterDashboard extends Controller
         return redirect()->route('dashboard')->with('success', 'Berhasil edit jadwal!');
     }
 
-    
+
 
     public function inputJadwalProses(Request $request)
     {

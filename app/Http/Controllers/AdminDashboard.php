@@ -54,11 +54,18 @@ class AdminDashboard extends Controller
             // dd($cekJadwal->toArray());
             $cekJadwalAktif = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->where('aktif', 'Y')->get();
             if (count($cekJadwalAktif) == 0) {
+                // dd($operation);
                 return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys', 'jadwalDokters'));
             }
             else if ($cekJadwalAktif[0]->hari == array_search($dayToday, $hari) ) {
                 $operation = 'noinput';
-                return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys', 'jadwalDokters'));
+                // dd($operation);
+                return redirect()->route('editJadwal', $cekJadwalAktif[0]->id);
+            }
+            else if (count($cekJadwalAktif) != 0) {
+                $operation = 'edit';
+                // dd($operation);
+                return redirect()->route('editJadwal', $cekJadwalAktif[0]->id);
             }
             return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys', 'jadwalDokters'));
         } else if (auth()->user()->role == 'pasien') {
