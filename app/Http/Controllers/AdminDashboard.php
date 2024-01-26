@@ -52,17 +52,6 @@ class AdminDashboard extends Controller
                 ];
             }
             // dd($cekJadwal->toArray());
-            $cekJadwalAktif = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->where('aktif', 'Y')->get();
-            if ($cekJadwalAktif[0]->hari == array_search($dayToday, $hari) ) {
-                $operation = 'noinput';
-                // dd($operation);
-                return redirect()->route('editJadwal', $cekJadwalAktif[0]->id);
-            }
-            else if (count($cekJadwalAktif) != 0) {
-                $operation = 'edit';
-                // dd($operation);
-                return redirect()->route('editJadwal', $cekJadwalAktif[0]->id);
-            }
             return redirect()->route('viewJadwal', compact('cekJadwal', 'operation', 'keys', 'jadwalDokters'));
             // return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys', 'jadwalDokters'));
         } else if (auth()->user()->role == 'pasien') {
