@@ -24,7 +24,7 @@
                     <td class="border px-4 py-2">{{ isset($table['status']) ? $table['status'] : 'Status Not Found' }}
                     </td>
                     <td class="border px-4 py-2">
-                        <a href="{{ route('editJadwalProses', $table['id']) }}"
+                        <a href="{{ route('editJadwal', $table['id']) }}"
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Pilih</a>
                     </td>
                 </tr>
