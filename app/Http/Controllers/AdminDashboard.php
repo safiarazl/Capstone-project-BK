@@ -53,11 +53,7 @@ class AdminDashboard extends Controller
             }
             // dd($cekJadwal->toArray());
             $cekJadwalAktif = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->where('aktif', 'Y')->get();
-            if (count($cekJadwalAktif) == 0) {
-                // dd($operation);
-                return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys', 'jadwalDokters'));
-            }
-            else if ($cekJadwalAktif[0]->hari == array_search($dayToday, $hari) ) {
+            if ($cekJadwalAktif[0]->hari == array_search($dayToday, $hari) ) {
                 $operation = 'noinput';
                 // dd($operation);
                 return redirect()->route('editJadwal', $cekJadwalAktif[0]->id);
@@ -67,7 +63,8 @@ class AdminDashboard extends Controller
                 // dd($operation);
                 return redirect()->route('editJadwal', $cekJadwalAktif[0]->id);
             }
-            return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys', 'jadwalDokters'));
+            return redirect()->route('viewJadwal', compact('cekJadwal', 'operation', 'keys', 'jadwalDokters'));
+            // return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'keys', 'jadwalDokters'));
         } else if (auth()->user()->role == 'pasien') {
             $jadwals = Jadwal_periksa::with(['dokter.poli'])->where('aktif', 'Y')->get();
             $pasien = Pasien::where('id_akun', auth()->user()->id)->first();

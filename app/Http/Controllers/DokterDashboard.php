@@ -168,6 +168,36 @@ class DokterDashboard extends Controller
         return redirect()->route('periksaPasien')->with('success', 'Berhasil memeriksa pasien!');
     }
 
+    public function viewJadwal()
+    {
+        $cekJadwal = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->get();
+        // dd($jadwal);
+        $operation = 'input';
+        date_default_timezone_set('Asia/Jakarta');
+            $dayToday = date('l');
+            $hari = [
+                'Senin' => 'Monday',
+                'Selasa' => 'Tuesday',
+                'Rabu' => 'Wednesday',
+                'Kamis' => 'Thursday',
+                'Jumat' => 'Friday',
+                'Sabtu' => 'Saturday',
+                'Minggu' => 'Sunday',
+            ];
+            $keys = array_keys($hari);
+        $jadwalDokters = [];
+            foreach ($cekJadwal as $key => $value) {
+                $jadwalDokters[] = [
+                    'id' => $value->id,
+                    'nama' => $value->dokter->nama,
+                    'hari' => $cekJadwal[$key]->hari,
+                    'jam_mulai' => $cekJadwal[$key]->jam_mulai,
+                    'jam_selesai' => $cekJadwal[$key]->jam_selesai,
+                    'status'=> $cekJadwal[$key]->aktif,
+                ];
+            }
+        return view('dashboard.dashboard', compact('cekJadwal', 'operation', 'jadwalDokters', 'dayToday', 'keys'));
+    }
     public function editJadwal($id_jadwal)
     {
         $cekJadwal = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->get();
@@ -263,7 +293,7 @@ class DokterDashboard extends Controller
             'aktif' => request('status'),
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Berhasil menambah jadwal!');
+        return redirect()->route('viewJadwal')->with('success', 'Berhasil menambah jadwal!');
     }
 
     public function changeProfileProses($id, Request $request)

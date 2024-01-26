@@ -71,6 +71,7 @@ route::middleware(['auth', 'checkRole:dokter'])->group(function () {
     Route::get('dokter/change-profile/{id}', [DokterDashboard::class, 'changeProfile'])->name('changeProfile');
     Route::put('dokter/change-profile-proses/{id}', [DokterDashboard::class, 'changeProfileProses'])->name('changeProfileProses');
 
+    Route::get('dokter/jadwal', [DokterDashboard::class,'viewJadwal'])->name('viewJadwal');
     Route::post('dokter/input-jadwal-proses', [DokterDashboard::class, 'inputJadwalProses'])->name('inputJadwalProses');
     Route::get('dokter/edit-jadwal/{id_jadwal}', [DokterDashboard::class,'editJadwal'])->name('editJadwal');
     Route::put('dokter/edit-jadwal-proses/{id_jadwal}', [DokterDashboard::class,'editJadwalProses'])->name('editJadwalProses');
