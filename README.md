@@ -2,6 +2,11 @@
 
 Selamat datang di projek Laravel Capstone-project-BK! Ikuti langkah-langkah di bawah untuk menjalankannya.
 
+## Requirement Laravel 10
+
+-   Min PHP 8.1.0
+-   Min Composer 2.2.0
+
 ## Instalasi
 
 1. Clone repository:
@@ -36,6 +41,8 @@ Selamat datang di projek Laravel Capstone-project-BK! Ikuti langkah-langkah di b
 
     ```bash
     php artisan serve
+    or
+    php -S localhost:8000 -t public/
     ```
 
 8. Buka web browser dan kunjungi.
