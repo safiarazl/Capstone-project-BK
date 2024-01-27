@@ -51,53 +51,59 @@
 <form class="py-4 px-6" action="{{ route('editJadwalProses', $jadwal->id) }}" method="POST">
     @csrf
     @method('PUT')
-        <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="service">
-                Hari
-            </label>
-            <select
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="hari" name="hari">
-                @foreach ($keys as $hari)
-                    @if ($hari != 'Minggu')
-                        <option value="{{ $hari }}" @if ($hari == $jadwal->hari) selected @endif>
-                            {{ ucwords(strtolower($hari)) }}</option>
-                    @endif
-                @endforeach
-            </select>
+    <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="service">
+            Hari
+        </label>
+        <select
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="hari" name="hari">
+            @foreach ($keys as $hari)
+                @if ($hari != 'Minggu')
+                    <option value="{{ $hari }}" @if ($hari == $jadwal->hari) selected @endif>
+                        {{ ucwords(strtolower($hari)) }}</option>
+                @endif
+            @endforeach
+        </select>
+    </div>
+    <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="time">
+            Jam Mulai
+        </label>
+        <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="jam_mulai" name="jam_mulai" value="{{ $jadwal->jam_mulai }}" type="time">
+    </div>
+    <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="time">
+            Jam Selesai
+        </label>
+        <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="jam_selesai" name="jam_selesai" type="time" value="{{ $jadwal->jam_selesai }}">
+    </div>
+    <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2" for="status">
+            Status
+        </label>
+        <div class="flex items-center">
+            <input type="radio" id="status_y" name="status" value="Y" class="mr-2">
+            <label for="status_y" class="mr-4">Aktif</label>
+            <input type="radio" id="status_n" name="status" value="N" class="mr-2">
+            <label for="status_n" class="mr-4">Tidak Aktif</label>
         </div>
-        <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="time">
-                Jam Mulai
-            </label>
-            <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="jam_mulai" name="jam_mulai" value="{{ $jadwal->jam_mulai }}" type="time">
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="time">
-                Jam Selesai
-            </label>
-            <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="jam_selesai" name="jam_selesai" type="time" value="{{ $jadwal->jam_selesai }}">
-        </div>
-        <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" for="status">
-                Status
-            </label>
-            <div class="flex items-center">
-                <input type="radio" id="status_y" name="status" value="Y" class="mr-2">
-                <label for="status_y" class="mr-4">Aktif</label>
-                <input type="radio" id="status_n" name="status" value="N" class="mr-2">
-                <label for="status_n" class="mr-4">Tidak Aktif</label>
-            </div>
-        </div>
-        <div class="flex items-center justify-center mb-4">
-            <button
-                class="bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline"
-                type="submit">
-                Submit
-            </button>
-        </div>
+    </div>
+    <div class="flex items-center justify-center mb-4">
+        <button
+            class="bg-gray-900 text-white py-2 px-4 rounded hover:bg-gray-800 focus:outline-none focus:shadow-outline"
+            type="submit">
+            Submit
+        </button>
 </form>
+<form action="{{ route('deleteJadwalProses', $jadwal->id) }}" method="POST">
+    @csrf
+    @method('DELETE')
+    <button type="submit"
+        class="bg-red-900 text-white py-2 px-4 rounded hover:bg-red-800 focus:outline-none focus:shadow-outline">Delete</button>
+</form>
+</div>

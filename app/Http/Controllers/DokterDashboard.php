@@ -277,7 +277,10 @@ class DokterDashboard extends Controller
         return redirect()->route('dashboard')->with('success', 'Berhasil edit jadwal!');
     }
 
-
+    public function deleteJadwalProses ($jadwal_id) {
+        Jadwal_periksa::where('id' , $jadwal_id)->delete();
+        return redirect()->route('dashboard')->with('success', 'Berhasil delete jadwal!');
+    }
 
     public function inputJadwalProses(Request $request)
     {
