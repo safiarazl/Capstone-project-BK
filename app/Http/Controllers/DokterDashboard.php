@@ -244,11 +244,28 @@ class DokterDashboard extends Controller
         $hari = $request->input('hari');
         $jam_mulai = $request->input('jam_mulai');
         $jam_selesai = $request->input('jam_selesai');
+        date_default_timezone_set('Asia/Jakarta');
+        $dayToday = date('l');
+        $hariLib = [
+                'Senin' => 'Monday',
+                'Selasa' => 'Tuesday',
+                'Rabu' => 'Wednesday',
+                'Kamis' => 'Thursday',
+                'Jumat' => 'Friday',
+                'Sabtu' => 'Saturday',
+                'Minggu' => 'Sunday',
+            ];
+        $cekJadwalAktif = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->where('aktif', 'Y')->get();
+        // dd($cekJadwalAktif);
         if (request('status') == 'Y') {
-            foreach ($cekJadwal as $jadwal) {
-                Jadwal_periksa::where('id', $jadwal->id)->update([
-                    'aktif' => 'N',
-                ]);
+            if (array_search($dayToday, $hariLib) == $cekJadwalAktif->first()->hari) {
+                return redirect()->route('viewJadwal')->with('error', 'Hari ini sudah ada jadwal aktif!');
+            } else {
+                foreach ($cekJadwal as $jadwal) {
+                    Jadwal_periksa::where('id', $jadwal->id)->update([
+                        'aktif' => 'N',
+                    ]);
+                }
             }
         }
         Jadwal_periksa::where('id' , $id_jadwal)->update([
@@ -274,20 +291,37 @@ class DokterDashboard extends Controller
         $user = auth()->user()->id;
         $cekJadwal = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->get();
         $dokter = Dokter::where('id_akun', $user)->first();
-        $hari = $request->input('hari');
+        $reqHari = $request->input('hari');
         $jam_mulai = $request->input('jam_mulai');
         $jam_selesai = $request->input('jam_selesai');
         // dd($dokter, $hari, $jam_mulai, $jam_selesai);
+        date_default_timezone_set('Asia/Jakarta');
+        $dayToday = date('l');
+        $hariLib = [
+                'Senin' => 'Monday',
+                'Selasa' => 'Tuesday',
+                'Rabu' => 'Wednesday',
+                'Kamis' => 'Thursday',
+                'Jumat' => 'Friday',
+                'Sabtu' => 'Saturday',
+                'Minggu' => 'Sunday',
+            ];
+        $cekJadwalAktif = Jadwal_periksa::where('id_dokter', auth()->user()->dokter->id)->where('aktif', 'Y')->get();
+        // dd($cekJadwalAktif);
         if (request('status') == 'Y') {
-            foreach ($cekJadwal as $jadwal) {
-                Jadwal_periksa::where('id', $jadwal->id)->update([
-                    'aktif' => 'N',
-                ]);
+            if (array_search($dayToday, $hariLib) == $cekJadwalAktif->first()->hari) {
+                return redirect()->route('viewJadwal')->with('error', 'Hari ini sudah ada jadwal aktif!');
+            } else {
+                foreach ($cekJadwal as $jadwal) {
+                    Jadwal_periksa::where('id', $jadwal->id)->update([
+                        'aktif' => 'N',
+                    ]);
+                }
             }
         }
         Jadwal_periksa::create([
             'id_dokter' => (int) $dokter->id,
-            'hari' => $hari,
+            'hari' => $reqHari,
             'jam_mulai' => $jam_mulai,
             'jam_selesai' => $jam_selesai,
             'aktif' => request('status'),
